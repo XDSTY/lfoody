@@ -3,16 +3,13 @@
     <div class="content-div">
       <router-view/>
     </div>
-    <footer-bar></footer-bar>
   </div>
 </template>
 
 <script>
-import Footer from '@/components/tabber.vue'
 export default {
   name: 'App',
   components: {
-    'footer-bar': Footer
   }
 }
 </script>
@@ -24,10 +21,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .content-div {
   margin-bottom: 55px;
+  margin-top: 10px;
 }
 </style>
