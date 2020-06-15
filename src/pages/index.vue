@@ -2,11 +2,11 @@
   <div style="background: #f6f6f6;position:relative;width:100%;font-size: .24rem; ">
     <div class="search_bomb_box" v-show="searchShow">
       <div class="search_top fix">
-        <a v-on:click="cancelSearch" class="search_bomb_box_a"><img src="../../images/back_jt.png"></a>
+        <a v-on:click="cancelSearch" class="search_bomb_box_a"><img src="../assets/images/back_jt.png"></a>
         <div>
           <form>
             <input type="text" name="" placeholder="新品上市">
-            <button type="submit"><img src="../../images/sous.png"></button>
+            <button type="submit"><img src="../assets/images/sous.png"></button>
           </form>
         </div>
       </div>
@@ -29,7 +29,7 @@
       </div>
       <div class="sos_list">
           <div v-on:click="searchClick"> 
-              <img src="../assets/list_sos.png" alt="">
+              <img src="../assets/images/list_sos.png" alt="">
               <span>当前搜索：红酒</span>
           </div>
       </div> 
@@ -44,42 +44,42 @@
           <ul>
               <li>
                   <a href="list_xq.html">
-                      <img src="../assets/zzrep.jpg" alt="" style="height:2.88rem;"> 
+                      <img src="../assets/images/zzrep.jpg" alt="" style="height:2.88rem;"> 
                       <p>习酒</p> 
                       <span>￥20000</span>
                   </a>
               </li>
               <li>
                   <a href="list_xq.html">
-                      <h2><img src="../assets/zzrep2.jpg" alt=""></h2>
+                      <h2><img src="../assets/images/zzrep2.jpg" alt=""></h2>
                       <p>谁知道贵州茅台庆典贵谁知道贵州茅台庆典贵</p> 
                       <span>￥20000</span> 
                   </a>
               </li>
               <li>
                   <a href="list_xq.html">
-                      <img src="../assets/zzrep1.jpg" alt="" style="height:2.88rem;"> 
+                      <img src="../assets/images/zzrep1.jpg" alt="" style="height:2.88rem;"> 
                       <p>习酒</p> 
                       <span>￥20000</span>
                   </a>
               </li>
               <li>
                   <a href="list_xq.html">
-                      <img src="../assets/zzrep.jpg" alt="" style="height:2.88rem;"> 
+                      <img src="../assets/images/zzrep.jpg" alt="" style="height:2.88rem;"> 
                       <p>习酒</p> 
                       <span>￥20000</span>
                   </a>
               </li>
               <li>
                   <a href="list_xq.html">
-                      <img src="../assets/zzrep1.jpg" alt="" style="height:2.88rem;"> 
+                      <img src="../assets/images/zzrep1.jpg" alt="" style="height:2.88rem;"> 
                       <p>习酒</p> 
                       <span>￥20000</span>
                   </a>
               </li>
               <li>
                   <a href="list_xq.html">
-                      <img src="../assets/zzrep2.jpg" alt="" style="height:2.88rem;"> 
+                      <img src="../assets/images/zzrep2.jpg" alt="" style="height:2.88rem;"> 
                       <p>习酒</p> 
                       <span>￥20000</span>
                   </a>
@@ -87,7 +87,7 @@
           </ul>
       </div>
       <div class="div_jiaz">
-        <img src="../assets/jiazz.gif" alt="">
+        <img src="../assets/images/jiazz.gif" alt="">
       </div>
       <!--  -->
     </div>
@@ -117,7 +117,4 @@ export default {
 </script>
 
 <style>
-@import "../css/app.css";
-@import "../css/mui.min.css";
-@import "../css/swiper.min.css";
 </style>

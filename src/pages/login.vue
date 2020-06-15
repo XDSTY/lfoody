@@ -1,9 +1,26 @@
 <template>
   <div>
-    <h2>a l g</h2>
+    <!-- 品牌 -->
+    <div style="height: .75rem;"></div>
+    <div class="ziye_toub">
+      <p>登录</p>
+    </div>
+    <!-- 头部 -->
+    <div class="logo_we">
+        <img class="logo" src="../assets/images/logo.png" alt="">
+        <div class="biaod">
+            <input type="text" placeholder="请输入手机号码">
+            <input type="text" placeholder="请输入登录密码">
+            <a href="#" class="wanji">忘记密码？</a>
+            <input type="button" class="anniu_w" value="登录"> 
+        </div>
+    </div>
+    <div class="ditu_zc">
+      <p>还没有账号？</p>
+      <a href="denglu_zc.html">立即注册</a>
+    </div>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -16,6 +33,5 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
 </style>

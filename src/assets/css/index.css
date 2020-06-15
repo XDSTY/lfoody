@@ -108,12 +108,11 @@ select:focus{
 	max-width:90%;
 }
 .indix_top input {
-	width: -webkit-fill-available;
     padding-left: .5rem;
     height: .5rem;
     border-radius: 1rem;
     border: solid 1px #bfbfbf;
-    background: url(../assets/icon.png) no-repeat center left 3px;
+    background: url(../images/icon.png) no-repeat center left 3px;
     background-size: .38rem;
     font-size: .24rem;
 	line-height: .5rem;
@@ -519,7 +518,7 @@ color: #ff2e26;
     width: .25rem;
     height:.15rem;
     display: block;
-    background: url(../assets/ligeee.png) no-repeat;
+    background: url(../images/ligeee.png) no-repeat;
 	/* background-position: 0 -1px; */
 	background-size: .25rem;
     margin-right: 20px;
@@ -529,7 +528,7 @@ color: #ff2e26;
     width: .25rem;
     height:.15rem;
     display: block;
-    background: url(../assets/ligeee.png) no-repeat;
+    background: url(../images/ligeee.png) no-repeat;
 	/* background-position: 0 -22px; */
 	background-size: .25rem; 
     margin-left: 20px;
@@ -609,7 +608,7 @@ color: #ff2e26;
     position: absolute;
     top: 0px;
     left: 0px;
-    background: url(../assets/back_jt.png) no-repeat center;
+    background: url(../images/back_jt.png) no-repeat center;
     background-size: .2rem;
 }
 .ziye_toub p {
@@ -688,7 +687,7 @@ color: #ff2e26;
     position: relative;
 }
 .neir_lise li p span.yanj {
-    background: url(../assets/Eye.svg)no-repeat center left;
+    background: url(../images/Eye.svg)no-repeat center left;
     background-size: .24rem;
     padding-left: .28rem;
 }
@@ -827,7 +826,7 @@ color: #ff2e26;
 	bottom: 0;
 	right: .2rem;
 	margin:auto 0;
-	background: url(../assets/right_jt.png) no-repeat center;
+	background: url(../images/right_jt.png) no-repeat center;
 	background-size:.2rem;
 	
 }
@@ -924,7 +923,7 @@ color: #ff2e26;
 	display: block;
 	line-height: .8rem;
 	margin: 0 .2rem;
-	background: url(../assets/grzx.png) no-repeat center left;
+	background: url(../images/grzx.png) no-repeat center left;
 	background-size: .3rem;
 	color: #ff2e26; 
     font-size: .26rem;
@@ -1159,7 +1158,7 @@ position: relative;
     line-height: .8rem;
    	margin-bottom: .4rem; 
    	background-color: #ff2e26;
-    background: url(../assets/grzx_.png) no-repeat center left;
+    background: url(../images/grzx_.png) no-repeat center left;
     background-size: .3rem; 
     font-size: .26rem;
 	line-height: .8rem;
@@ -1462,7 +1461,7 @@ display: block;
 }
 .yinghk_j .ka a::after{
 	content: "";
-	background: url(../assets/gengd_img.png) no-repeat center;
+	background: url(../images/gengd_img.png) no-repeat center;
 	background-size:.15rem;
 	display: block;
 	position: absolute;
@@ -1530,7 +1529,7 @@ display: block;
 
 .tiaolk_tx{
 	padding: 0 0 0 .5rem;
-	background:url(../assets/yiw.png) no-repeat center left .2rem;
+	background:url(../images/yiw.png) no-repeat center left .2rem;
 	width: .25rem;
 	height: .25rem;
 	background-size: .25rem;
@@ -1753,7 +1752,7 @@ padding: 2%;
 }
 .gerzx_shangj::after{
 	content: "";
-	background: url(../assets/right_jt.png) no-repeat center;
+	background: url(../images/right_jt.png) no-repeat center;
 	background-size: .1rem;
 	width: .1rem;
 	height: .2rem;
@@ -1942,7 +1941,7 @@ padding: 2%;
 	align-items : center; 
 }
 .zhonghe_Sd ul li{
-	background: url(../assets/xia_jt.png) no-repeat center right;
+	background: url(../images/xia_jt.png) no-repeat center right;
 	background-size: .24rem;
 	padding-right: .3rem;
 }
@@ -2226,7 +2225,7 @@ text-overflow: ellipsis;
 .dili_guanli ul li::after{
 	content: "";
 	display: block;
-	background:url(../assets/gengd_img.png) no-repeat center;
+	background:url(../images/gengd_img.png) no-repeat center;
 	background-size: .15rem;
 	width: .15rem;
 	height: .3rem;
@@ -2266,7 +2265,7 @@ text-overflow: ellipsis;
 
 .tainj_shouh_dzk .xuanz::before{ 
 	content: "";
-	background:url(../assets/gengd_img.png) no-repeat center;
+	background:url(../images/gengd_img.png) no-repeat center;
 	background-size: .15rem;
 	width: .15rem;
 	height: .3rem;
@@ -2324,8 +2323,8 @@ text-overflow: ellipsis;
 }
 .express-area-box header .back,
 .express-area-box header .close { position: absolute; top: 0; width: 1.675rem; height: 2.25rem; }
-.express-area-box header .back { display: none; left: 0; background: url(../assets/back.png) no-repeat center;   background-size: .45rem .75rem; }
-.express-area-box header .close { right: 0; background: url(../assets/close-area.png) no-repeat center; background-size: .675rem .675rem; }
+.express-area-box header .back { display: none; left: 0; background: url(../images/back.png) no-repeat center;   background-size: .45rem .75rem; }
+.express-area-box header .close { right: 0; background: url(../images/close-area.png) no-repeat center; background-size: .675rem .675rem; }
 .express-area-box article { height: 250px; overflow-y: scroll; }
 .area-list li { padding: .5rem; 
 	border-bottom: 1px solid #e2e2e2;
@@ -2421,7 +2420,7 @@ text-overflow: ellipsis;
 	width: .3rem;
 	height: .3rem;
 	display: block;
-	background: url(../assets/xuanz1.png) no-repeat center;
+	background: url(../images/xuanz1.png) no-repeat center;
 	background-size: 100%;
 	position: absolute;
 	top: 0;
@@ -2431,6 +2430,6 @@ text-overflow: ellipsis;
 }
 
 .zhif_fangs li.no i{
-	background: url(../assets/xuanz.png) no-repeat center;
+	background: url(../images/xuanz.png) no-repeat center;
 	background-size: 100%;
 }

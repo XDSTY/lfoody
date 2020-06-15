@@ -7,6 +7,9 @@
 </template>
 
 <script>
+import './assets/css/index.css'
+import './assets/css/mui.min.css'
+import './assets/css/swiper.min.css'
 export default {
   name: 'App',
   components: {
