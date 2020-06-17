@@ -5,6 +5,7 @@ import login from '@/pages/login'
 import index from '@/pages/index'
 import cart from '@/pages/cart'
 import me from '@/pages/me'
+import register from '@/pages/register'
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/me',
       name: 'me',
       component: me
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: register
     }
   ]
 })

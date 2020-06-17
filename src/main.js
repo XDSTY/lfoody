@@ -5,7 +5,13 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import Meta from 'vue-meta'
+import { MessageBox, Popup, Picker, Switch } from 'mint-ui'
+import 'mint-ui/lib/style.css'
 
+Vue.component(MessageBox.name, MessageBox)
+Vue.component(Popup.name, Popup)
+Vue.component(Picker.name, Picker)
+Vue.component(Switch.name, Switch)
 Vue.use(Meta)
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false

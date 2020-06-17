@@ -7,7 +7,7 @@
     </div>
     <!-- 头部 -->
     <div class="logo_we">
-        <img class="logo" src="../assets/images/logo.png" alt="">
+        <img class="logo" src="../assets/images/logo.jpg" alt="">
         <div class="biaod">
             <input type="text" placeholder="请输入手机号码">
             <input type="text" placeholder="请输入登录密码">
@@ -17,7 +17,7 @@
     </div>
     <div class="ditu_zc">
       <p>还没有账号？</p>
-      <a href="denglu_zc.html">立即注册</a>
+      <a v-on:click="register">立即注册</a>
     </div>
   </div>
 </template>
@@ -29,6 +29,11 @@ export default {
           username: '',
           password: ''
       }
+  },
+  methods: {
+    register() {
+      this.$router.push('/register')
+    }
   }
 }
 </script>
