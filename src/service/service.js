@@ -1,10 +1,10 @@
-import qs from 'qs'
+import axios from 'axios';
 import { getStore, setStore } from './storage'
-
-
-export const base = ''
-
-this.$axios.defaults.timeout=15000
+import Vue from 'vue'
+import router from '../router/index'
+import { Toast } from 'mint-ui'
+Vue.component(Toast.name, Toast)
+export const base = '/api'
 
 const get = (path, query) => {
     return this.$axios(`${base}${path}`, query)
@@ -22,32 +22,30 @@ const post = (path, body) => {
       }
     }
   
-    // return this.$axios(`${baseUrl}${path}`, reqBody, 'post')
-    return this.$axios
+    return this.$axios(`${base}${path}`, reqBody, 'post')
 }
 
-this.$axios.interceptors.request.use(config => {
+axios.interceptors.request.use(config => {
   return config
 }, err => {
-  Message.error('请求超时')
+  Toast('请求超时');
   return Promise.reject(err)
 })
 
 // http response 拦截器
-this.$axios.interceptors.response.use(response => {
+axios.interceptors.response.use(response => {
   const data = response.data
 
   // 根据返回的code值来做不同的处理(和后端约定)
-  switch (data.code) {
+  switch (response.data.code) {
     case 401:
       // 未登录 清除已登录状态
-      Cookies.set('userInfo', '')
       setStore('accessToken', '')
       if (router.history.current.name !== 'login') {
         if (data.msg !== null) {
-          Message.error(data.msg)
+          Toast(data.msg)
         } else {
-          Message.error('未知错误，请重新登录')
+          Toast('未知错误，请重新登录');
         }
         router.push('/login')
       }
@@ -55,17 +53,17 @@ this.$axios.interceptors.response.use(response => {
     case 403:
       // 没有权限
       if (data.msg !== null) {
-        Message.error(data.msg)
+        Toast(data.msg)
       } else {
-        Message.error('未知错误')
+        Toast('未知错误')
       }
       break
     case 500:
       // 错误
       if (data.msg !== null) {
-        Message.error(data.msg)
+        Toast(data.msg)
       } else {
-        Message.error('未知错误')
+        Toast('未知错误')
       }
       break
     default:
@@ -73,40 +71,57 @@ this.$axios.interceptors.response.use(response => {
   }
 
   return data
-}, (err) => {
-  // 返回状态码不为200时候的错误处理
-  Message.error(err.toString())
-  return Promise.resolve(err)
+}, (error) => {
+  if(error && error.response) {
+    switch (error.response.status) {
+      case 400: error.message = '请求错误' ; break;
+      case 401: error.message = '未授权，请重新登录'; Toast(error.message); router.push('/login'); break;
+      case 403: error.message = '拒绝访问'; break;
+      case 404: error.message = '请求出错'; break;
+      case 408: error.message = '请求超时'; break;
+      case 500: error.message = '服务器错误'; break;
+      case 501: error.message = '服务未实现'; break;
+      case 502: error.message = '网络错误'; break;
+      case 503: error.message = '服务不可用'; break;
+      case 504: error.message = '网络超时'; break;
+      case 505: error.message = 'HTTP版本不受支持'; break;
+      default: error.message = '连接出错!';
+    }
+  } else {
+    error.message = '服务器内部错误xxx';
+  }
+  Toast(error.message)
+  return Promise.reject(error)
 })
 
 export const getRequest = (url, params) => {
   const accessToken = getStore('accessToken')
-  return this.$axios({
+  return axios({
     method: 'get',
     url: `${base}${url}`,
     params: params,
     headers: {
-      'accessToken': accessToken
+      'Authorization': accessToken
     }
   })
 }
 
 export const postRequest = (url, params) => {
   const accessToken = getStore('accessToken')
-  return this.$axios({
+  return axios({
     method: 'post',
     url: `${base}${url}`,
     data: params,
     headers: {
       'Content-Type': 'application/json',
-      'accessToken': accessToken
+      'Authorization': accessToken
     }
   })
 }
 
 export const putRequest = (url, params) => {
   const accessToken = getStore('accessToken')
-  return this.$axios({
+  return axios({
     method: 'put',
     url: `${base}${url}`,
     data: params,
@@ -119,48 +134,53 @@ export const putRequest = (url, params) => {
     }],
     headers: {
       'Content-Type': 'application/json',
-      'accessToken': accessToken
+      'Authorization': accessToken
     }
   })
 }
 
 export const deleteRequest = (url, params) => {
   const accessToken = getStore('accessToken')
-  return this.$axios({
+  return axios({
     method: 'delete',
     url: `${base}${url}`,
     params: params,
     headers: {
-      'accessToken': accessToken
+      'Authorization': accessToken
     }
   })
 }
 
 export const importRequest = (url, params) => {
   const accessToken = getStore('accessToken')
-  return this.$axios({
+  return axios({
     method: 'post',
     url: `${base}${url}`,
     data: params,
     headers: {
-      'accessToken': accessToken
+      'Authorization': accessToken
     }
   })
 }
 
 export const uploadFileRequest = (url, params) => {
   const accessToken = getStore('accessToken')
-  return this.$axios({
+  return axios({
     method: 'post',
     url: `${base}${url}`,
     params: params,
     headers: {
-      'accessToken': accessToken
-    }
+      'Authorization': accessToken
+    }    
   })
 }
 
 export const common = {
-  cityList: query => post('/city/list', query),
-  companyList: query => post('/company/list', query)
+  cityList: query => postRequest('/city/list', query),
+  companyList: query => postRequest('/company/list', query)
+}
+
+export const user = {
+  register: query => postRequest('/user/register', query),
+  login: query => postRequest('/user/login', query)
 }

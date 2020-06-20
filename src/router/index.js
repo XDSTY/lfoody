@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { getStore, setStore } from '../service/storage'
 
 import login from '@/pages/login'
 import index from '@/pages/index'
@@ -9,7 +10,7 @@ import register from '@/pages/register'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/login',
@@ -19,17 +20,26 @@ export default new Router({
     {
       path: '/index',
       name: 'index',
-      component: index
+      component: index,
+      meta: {
+        needLogin: true
+      }
     },
     {
       path: '/cart',
       name: 'cart',
-      component: cart
+      component: cart,
+      meta: {
+        needLogin: true
+      }
     },
     {
       path: '/me',
       name: 'me',
-      component: me
+      component: me,
+      meta: {
+        needLogin: true
+      }
     },
     {
       path: '/register',
@@ -38,3 +48,21 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  // 获取用户登录成功后储存的登录标志
+  const accessToken = getStore('accessToken')
+  // 如果是已经登陆状态
+  if (accessToken !== null) {
+    next()
+  } else {
+    // 判断是否需要登陆
+    if (to.meta.needLogin === true) {
+      router.push('/login')
+    } else {
+      next()
+    }
+  }
+})
+
+export default router;

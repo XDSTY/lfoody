@@ -17,6 +17,8 @@
                 </mt-popup>
                 <input type="text" placeholder="请选择城市" v-model="cityName" @click="citySelect">
                 <input type="text" placeholder="请选择公司" v-model="companyName" @click="companySelect">
+                <input type="text" placeholder="配送地址" disabled v-model="deliveryAddress">
+                <input type="text" placeholder="配送时间" disabled v-model="deliveryTime">
                 <input type="text" placeholder="请输入手机号码" v-model="user.linkPhone">
                 <input type="text" placeholder="请输入登录密码" v-model="user.password">
                 <input type="text" placeholder="请确认登录密码"> 
@@ -28,11 +30,15 @@
 </template>
 
 <script>
+import {common, user} from '../service/service'
 export default {
   data: function () {
       return {
         cityName: '',
         companyName: '',
+        deliveryAddress: '',
+        deliveryTime: '',
+        companyList: [],
         user: {
             cityId:'',
             companyId: '',
@@ -44,12 +50,12 @@ export default {
         companyPoppup: false,
         cityDateSlots: [
           {
-            values: [{cityName: '请选择城市', cityId: -1},{cityName: '北京', cityId: 1}, {cityName: '天津', cityId: 2} ]
+            values: [{"cityName": '请选择', "cityId": -1}]
           }
         ],
         companyDataSlots: [
             {
-                values: [{companyName: '请选择公司', companyId: -1}, {companyName: '公司1', companyId: 1}, {companyName: '公司2', companyId: 2}]
+                values: [{companyName: '请选择', companyId: -1}]
             }
         ]
       }
@@ -58,19 +64,45 @@ export default {
       onCityChange(picker, values) {
         this.user.cityId = values[0].cityId
         this.cityName = values[0].cityName
+        if(values[0].cityId != -1) {
+          this.getCompanyList()
+        }
       },
       onCompanyChange(picker, values) {
         this.companyName = values[0].companyName
         this.user.companyId = values[0].companyId
+        this.companyList.forEach(company => {
+          if(company.id == values[0].companyId) {
+            this.deliveryAddress = company.address
+            this.deliveryTime = company.deliveryTime
+          }
+        })
       },
       citySelect(){
           this.cityPopup = true
       },
       companySelect() {
-          this.companyPoppup = true
+        if(this.user.cityId === -1) {
+          this.$toast('请先选择城市')
+          return
+        }
+        this.companyPoppup = true
+      },
+      getCompanyList() {
+        common.companyList({cityId: this.user.cityId})
+          .then((data) => {
+            data.forEach(company => {
+              this.companyDataSlots[0].values.push({companyName: company.shortName, companyId: company.id})
+            });
+            this.companyList = data
+          })
       }
     },
     mounted() {
+      common.cityList('')
+        .then((data) => {
+           this.cityDateSlots[0].values = this.cityDateSlots[0].values.concat(data)
+        })
     }
 }
 </script>
