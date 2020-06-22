@@ -15,15 +15,16 @@
                 <mt-popup v-model="companyPoppup" position="bottom" class="mint-popup-4">
                     <mt-picker value-key="companyName" :slots="companyDataSlots" @change="onCompanyChange" :visible-item-count="5" :show-toolbar="false"></mt-picker>
                 </mt-popup>
+                <input type="text" placeholder="用户名" v-model="user.username">
                 <input type="text" placeholder="请选择城市" v-model="cityName" @click="citySelect">
                 <input type="text" placeholder="请选择公司" v-model="companyName" @click="companySelect">
                 <input type="text" placeholder="配送地址" disabled v-model="deliveryAddress">
                 <input type="text" placeholder="配送时间" disabled v-model="deliveryTime">
-                <input type="text" placeholder="请输入手机号码" v-model="user.linkPhone">
-                <input type="text" placeholder="请输入登录密码" v-model="user.password">
-                <input type="text" placeholder="请确认登录密码"> 
+                <input type="text" placeholder="请输入手机号码" v-model="user.phone">
+                <input type="password" placeholder="请输入登录密码" v-model="user.password">
+                <input type="password" placeholder="请确认登录密码"> 
 
-                <input type="button" class="anniu_w" value="注册"> 
+                <input type="button" class="anniu_w" value="注册" @click="register"> 
             </div>
         </div> 
   </div>
@@ -31,6 +32,7 @@
 
 <script>
 import {common, user} from '../service/service'
+import { parseTime } from '../utils/index'
 export default {
   data: function () {
       return {
@@ -43,7 +45,7 @@ export default {
             cityId:'',
             companyId: '',
             username: '',
-            linkPhone: '',
+            phone: '',
             password: ''
         },
         cityPopup: false,
@@ -71,12 +73,13 @@ export default {
       onCompanyChange(picker, values) {
         this.companyName = values[0].companyName
         this.user.companyId = values[0].companyId
-        this.companyList.forEach(company => {
-          if(company.id == values[0].companyId) {
-            this.deliveryAddress = company.address
-            this.deliveryTime = company.deliveryTime
+        for (var i = 0; i < this.companyList.length; i++ ) {
+          if(this.companyList[i].id == values[0].companyId) {
+            this.deliveryAddress = this.companyList[i].address
+            this.deliveryTime = parseTime(this.companyList[i].deliveryTime, '{y}-{m}-{d} {h}:{i}')
+            break
           }
-        })
+        }
       },
       citySelect(){
           this.cityPopup = true
@@ -95,6 +98,15 @@ export default {
               this.companyDataSlots[0].values.push({companyName: company.shortName, companyId: company.id})
             });
             this.companyList = data
+          })
+      },
+      register() {
+        user.register(this.user)
+          .then((data) => {
+            if(data.code == 1) {
+              this.$toast('注册成功，请登录')
+              this.$router.push('/login')
+            }
           })
       }
     },

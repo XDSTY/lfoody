@@ -37,35 +37,9 @@ axios.interceptors.response.use(response => {
   const data = response.data
 
   // 根据返回的code值来做不同的处理(和后端约定)
-  switch (response.data.code) {
-    case 401:
-      // 未登录 清除已登录状态
-      setStore('accessToken', '')
-      if (router.history.current.name !== 'login') {
-        if (data.msg !== null) {
-          Toast(data.msg)
-        } else {
-          Toast('未知错误，请重新登录');
-        }
-        router.push('/login')
-      }
-      break
-    case 403:
-      // 没有权限
-      if (data.msg !== null) {
-        Toast(data.msg)
-      } else {
-        Toast('未知错误')
-      }
-      break
-    case 500:
-      // 错误
-      if (data.msg !== null) {
-        Toast(data.msg)
-      } else {
-        Toast('未知错误')
-      }
-      break
+  switch (data.code) {
+    case -1:
+      Toast(data.message); break
     default:
       return data
   }
