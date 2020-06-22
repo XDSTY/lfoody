@@ -5,6 +5,8 @@ import router from '../router/index'
 import { Toast } from 'mint-ui'
 Vue.component(Toast.name, Toast)
 export const base = '/api'
+// 请求来源  100 wap
+export const origin = 100
 
 const get = (path, query) => {
     return this.$axios(`${base}${path}`, query)
@@ -36,7 +38,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
   const data = response.data
 
-  // 根据返回的code值来做不同的处理(和后端约定)
+  // 根据返回的code值来做不同的处理
   switch (data.code) {
     case -1:
       Toast(data.message); break
@@ -75,7 +77,8 @@ export const getRequest = (url, params) => {
     url: `${base}${url}`,
     params: params,
     headers: {
-      'Authorization': accessToken
+      'Authorization': accessToken,
+      'origin': origin
     }
   })
 }
@@ -88,7 +91,8 @@ export const postRequest = (url, params) => {
     data: params,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': accessToken
+      'Authorization': accessToken,
+      'origin': origin
     }
   })
 }
@@ -108,7 +112,8 @@ export const putRequest = (url, params) => {
     }],
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': accessToken
+      'Authorization': accessToken,
+      'origin': origin
     }
   })
 }
@@ -120,7 +125,8 @@ export const deleteRequest = (url, params) => {
     url: `${base}${url}`,
     params: params,
     headers: {
-      'Authorization': accessToken
+      'Authorization': accessToken,
+      'origin': origin
     }
   })
 }
@@ -132,7 +138,8 @@ export const importRequest = (url, params) => {
     url: `${base}${url}`,
     data: params,
     headers: {
-      'Authorization': accessToken
+      'Authorization': accessToken,
+      'origin': origin
     }
   })
 }
@@ -144,7 +151,8 @@ export const uploadFileRequest = (url, params) => {
     url: `${base}${url}`,
     params: params,
     headers: {
-      'Authorization': accessToken
+      'Authorization': accessToken,
+      'origin': origin
     }    
   })
 }
