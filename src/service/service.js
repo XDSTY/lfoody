@@ -45,8 +45,13 @@ axios.interceptors.response.use(response => {
       Toast(data.message); break;
     case 1022:
       // accessToken过期  带上refreshToken重新请求获取新的token
-
-      break;
+      const refreshToken = getStore('refreshToken')
+      if(!refreshToken || !response.config) {
+        router.push('/login')
+        return
+      }
+      return 
+      break
     default:
       return data
   }
@@ -76,6 +81,10 @@ axios.interceptors.response.use(response => {
 })
 
 export const getRequest = (url, params) => {
+  if(!accessToken){
+    router.push('/login')
+    return
+  }
   const accessToken = getStore('accessToken')
   return axios({
     method: 'get',
@@ -83,13 +92,17 @@ export const getRequest = (url, params) => {
     params: params,
     headers: {
       'Authorization': accessToken,
-      'origin': origin
+      'sourceCode': origin
     }
   })
 }
 
 export const postRequest = (url, params) => {
-  const accessToken = getStore('accessToken')
+  var accessToken = getStore('accessToken')
+  if(!accessToken){
+    router.push('/login')
+    return
+  }
   return axios({
     method: 'post',
     url: `${base}${url}`,
@@ -97,13 +110,31 @@ export const postRequest = (url, params) => {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': accessToken,
-      'origin': origin
+      'sourceCode': origin
+    }
+  })
+}
+
+export const postRequestWithRefreshToken = (url, params) => {
+  return axios({
+    method: 'post',
+    url: `${base}${url}`,
+    data: params,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': accessToken,
+      'refreshToken': getStore('refreshToken'),
+      'sourceCode': origin
     }
   })
 }
 
 export const putRequest = (url, params) => {
   const accessToken = getStore('accessToken')
+  if(!accessToken){
+    router.push('/login')
+    return
+  }
   return axios({
     method: 'put',
     url: `${base}${url}`,
@@ -118,46 +149,58 @@ export const putRequest = (url, params) => {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': accessToken,
-      'origin': origin
+      'sourceCode': origin
     }
   })
 }
 
 export const deleteRequest = (url, params) => {
   const accessToken = getStore('accessToken')
+  if(!accessToken){
+    router.push('/login')
+    return
+  }
   return axios({
     method: 'delete',
     url: `${base}${url}`,
     params: params,
     headers: {
       'Authorization': accessToken,
-      'origin': origin
+      'sourceCode': origin
     }
   })
 }
 
 export const importRequest = (url, params) => {
   const accessToken = getStore('accessToken')
+  if(!accessToken){
+    router.push('/login')
+    return
+  }
   return axios({
     method: 'post',
     url: `${base}${url}`,
     data: params,
     headers: {
       'Authorization': accessToken,
-      'origin': origin
+      'sourceCode': origin
     }
   })
 }
 
 export const uploadFileRequest = (url, params) => {
   const accessToken = getStore('accessToken')
+  if(!accessToken){
+    router.push('/login')
+    return
+  }
   return axios({
     method: 'post',
     url: `${base}${url}`,
     params: params,
     headers: {
       'Authorization': accessToken,
-      'origin': origin
+      'sourceCode': origin
     }    
   })
 }
