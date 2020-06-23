@@ -42,7 +42,8 @@ export default {
       user.login(this.user)
         .then((res) => {
           if(res.code == 1 && res.data.token) {
-            setStore('accessToken', res.data.token)
+            setStore('accessToken', res.data.accessToken)
+            setStore('refreshToken', res.data.refreshToken)
             this.$router.push('/index')
           }
         })

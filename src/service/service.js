@@ -39,9 +39,14 @@ axios.interceptors.response.use(response => {
   const data = response.data
 
   // 根据返回的code值来做不同的处理
+  console.log(response.config)
   switch (data.code) {
     case -1:
-      Toast(data.message); break
+      Toast(data.message); break;
+    case 1022:
+      // accessToken过期  带上refreshToken重新请求获取新的token
+
+      break;
     default:
       return data
   }
