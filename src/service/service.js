@@ -38,8 +38,8 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
   const data = response.data
 
-  // 根据返回的code值来做不同的处理
   console.log(response.config)
+  // 根据返回的code值来做不同的处理
   switch (data.code) {
     case -1:
       Toast(data.message); break;
@@ -50,7 +50,15 @@ axios.interceptors.response.use(response => {
         router.push('/login')
         return
       }
-      return 
+      // 重新发起请求
+      var config = response.config
+      var url = config.url.substring(4)
+      var params = config.data
+      if(config.method == 'post') {
+        postRequestWithRefreshToken(url, params)
+      } else {
+        getRequestWithRefreshToken(url, params)
+      }
       break
     default:
       return data
@@ -74,17 +82,13 @@ axios.interceptors.response.use(response => {
       default: error.message = '连接出错!';
     }
   } else {
-    error.message = '服务器内部错误xxx';
+    error.message = '服务器内部错误';
   }
   Toast(error.message)
   return Promise.reject(error)
 })
 
 export const getRequest = (url, params) => {
-  if(!accessToken){
-    router.push('/login')
-    return
-  }
   const accessToken = getStore('accessToken')
   return axios({
     method: 'get',
@@ -97,12 +101,22 @@ export const getRequest = (url, params) => {
   })
 }
 
+export const getRequestWithRefreshToken = (url, params) => {
+  const accessToken = getStore('accessToken')
+  return axios({
+    method: 'get',
+    url: `${base}${url}`,
+    params: params,
+    headers: {
+      'Authorization': accessToken,
+      'sourceCode': origin,
+      'refreshToken': getStore('refreshToken')
+    }
+  })
+}
+
 export const postRequest = (url, params) => {
   var accessToken = getStore('accessToken')
-  if(!accessToken){
-    router.push('/login')
-    return
-  }
   return axios({
     method: 'post',
     url: `${base}${url}`,
@@ -131,10 +145,6 @@ export const postRequestWithRefreshToken = (url, params) => {
 
 export const putRequest = (url, params) => {
   const accessToken = getStore('accessToken')
-  if(!accessToken){
-    router.push('/login')
-    return
-  }
   return axios({
     method: 'put',
     url: `${base}${url}`,
@@ -156,10 +166,6 @@ export const putRequest = (url, params) => {
 
 export const deleteRequest = (url, params) => {
   const accessToken = getStore('accessToken')
-  if(!accessToken){
-    router.push('/login')
-    return
-  }
   return axios({
     method: 'delete',
     url: `${base}${url}`,
@@ -173,10 +179,6 @@ export const deleteRequest = (url, params) => {
 
 export const importRequest = (url, params) => {
   const accessToken = getStore('accessToken')
-  if(!accessToken){
-    router.push('/login')
-    return
-  }
   return axios({
     method: 'post',
     url: `${base}${url}`,
@@ -190,10 +192,6 @@ export const importRequest = (url, params) => {
 
 export const uploadFileRequest = (url, params) => {
   const accessToken = getStore('accessToken')
-  if(!accessToken){
-    router.push('/login')
-    return
-  }
   return axios({
     method: 'post',
     url: `${base}${url}`,
