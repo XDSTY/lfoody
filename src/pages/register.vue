@@ -114,8 +114,9 @@ export default {
       common.cityList('')
         .then((res) => {
           console.log(res)
-           this.cityDateSlots[0].values = this.cityDateSlots[0].values.concat(res.data)
-           console.log(11)
+          if(res && res.code == 1) {
+            this.cityDateSlots[0].values = this.cityDateSlots[0].values.concat(res.data)
+          }
         })
     }
 }

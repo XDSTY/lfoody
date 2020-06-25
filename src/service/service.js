@@ -60,17 +60,12 @@ axios.interceptors.response.use(response => {
       }
       // 重新发起请求
       var config = response.config
-      var url = config.url.substring(4)
-      var params = config.data
-      if(config.method == 'post') {
-        postRequestWithRefreshToken(url, params)
-      } else {
-        getRequestWithRefreshToken(url, params)
-      }
-      break
-    default:
-      return data
+      config.headers.refreshToken = getStore('refreshToken')
+      console.log(config)
+      return axios(config)
+    default:    
   }
+  return data
 }, (error) => {
   if(error && error.response) {
     switch (error.response.status) {
@@ -91,7 +86,7 @@ axios.interceptors.response.use(response => {
     error.message = '服务器内部错误';
   }
   Toast(error.message)
-  // return Promise.reject(error)
+  return Promise.reject(error)
 })
 
 export const getRequest = (url, params) => {
