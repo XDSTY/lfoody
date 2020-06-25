@@ -36,14 +36,22 @@ axios.interceptors.request.use(config => {
 
 // http response 拦截器
 axios.interceptors.response.use(response => {
-  const data = response.data
+  if(response && response.headers) {
+    var accessToken = response.headers.authorization
+    var refreshToken = response.headers.refreshtoken
+    if(accessToken && refreshToken) {
+      setStore('accessToken', accessToken)
+      setStore('refreshToken', refreshToken)
+    }
+  }
 
-  console.log(response.config)
+  const data = response.data
   // 根据返回的code值来做不同的处理
   switch (data.code) {
     case -1:
       Toast(data.message); break;
     case 1022:
+      console.log('重新发起请求')
       // accessToken过期  带上refreshToken重新请求获取新的token
       const refreshToken = getStore('refreshToken')
       if(!refreshToken || !response.config) {
@@ -63,8 +71,6 @@ axios.interceptors.response.use(response => {
     default:
       return data
   }
-
-  return data
 }, (error) => {
   if(error && error.response) {
     switch (error.response.status) {
@@ -85,7 +91,7 @@ axios.interceptors.response.use(response => {
     error.message = '服务器内部错误';
   }
   Toast(error.message)
-  return Promise.reject(error)
+  // return Promise.reject(error)
 })
 
 export const getRequest = (url, params) => {
@@ -95,7 +101,7 @@ export const getRequest = (url, params) => {
     url: `${base}${url}`,
     params: params,
     headers: {
-      'Authorization': accessToken,
+      'authorization': accessToken,
       'sourceCode': origin
     }
   })
@@ -108,7 +114,7 @@ export const getRequestWithRefreshToken = (url, params) => {
     url: `${base}${url}`,
     params: params,
     headers: {
-      'Authorization': accessToken,
+      'authorization': accessToken,
       'sourceCode': origin,
       'refreshToken': getStore('refreshToken')
     }
@@ -123,7 +129,7 @@ export const postRequest = (url, params) => {
     data: params,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': accessToken,
+      'authorization': accessToken,
       'sourceCode': origin
     }
   })
@@ -136,7 +142,7 @@ export const postRequestWithRefreshToken = (url, params) => {
     data: params,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': accessToken,
+      'authorization': getStore('accessToken'),
       'refreshToken': getStore('refreshToken'),
       'sourceCode': origin
     }
@@ -158,7 +164,7 @@ export const putRequest = (url, params) => {
     }],
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': accessToken,
+      'authorization': accessToken,
       'sourceCode': origin
     }
   })
@@ -171,7 +177,7 @@ export const deleteRequest = (url, params) => {
     url: `${base}${url}`,
     params: params,
     headers: {
-      'Authorization': accessToken,
+      'authorization': accessToken,
       'sourceCode': origin
     }
   })
@@ -184,7 +190,7 @@ export const importRequest = (url, params) => {
     url: `${base}${url}`,
     data: params,
     headers: {
-      'Authorization': accessToken,
+      'authorization': accessToken,
       'sourceCode': origin
     }
   })
@@ -197,7 +203,7 @@ export const uploadFileRequest = (url, params) => {
     url: `${base}${url}`,
     params: params,
     headers: {
-      'Authorization': accessToken,
+      'authorization': accessToken,
       'sourceCode': origin
     }    
   })

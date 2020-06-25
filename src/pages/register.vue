@@ -93,11 +93,11 @@ export default {
       },
       getCompanyList() {
         common.companyList({cityId: this.user.cityId})
-          .then((data) => {
-            data.forEach(company => {
+          .then((res) => {
+            res.data.forEach(company => {
               this.companyDataSlots[0].values.push({companyName: company.shortName, companyId: company.id})
             });
-            this.companyList = data
+            this.companyList = res.data
           })
       },
       register() {
@@ -112,8 +112,10 @@ export default {
     },
     mounted() {
       common.cityList('')
-        .then((data) => {
-           this.cityDateSlots[0].values = this.cityDateSlots[0].values.concat(data)
+        .then((res) => {
+          console.log(res)
+           this.cityDateSlots[0].values = this.cityDateSlots[0].values.concat(res.data)
+           console.log(11)
         })
     }
 }
