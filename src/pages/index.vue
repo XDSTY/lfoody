@@ -17,11 +17,11 @@
           <li><a href="list.html">花果园铺</a></li>
           <li><a href="list.html">120㎡</a></li>
           <li><a href="list.html">餐饮</a></li> 
-        </ul> 
+        </ul>
       </div>
     </div>
     <div style="height: .75rem;"></div>
-    <div id="waik" v-show="contentShow"> 
+    <div id="waik" v-show="contentShow">
       <!-- 头部 -->
       <div class="ziye_toub">
           <div class="left" onclick="history.back();"></div>
@@ -30,64 +30,21 @@
       <div class="sos_list">
           <div v-on:click="searchClick"> 
               <img src="../assets/images/list_sos.png" alt="">
-              <span>当前搜索：红酒</span>
+              <span v-if="nowSearch">当前搜索： {{nowSearch}}</span>
           </div>
       </div> 
-      <div class="zhonghe_Sd">
-          <ul>
-              <li>综合</li>
-              <li>销量</li>
-              <li>有货优先</li>
-          </ul>
-      </div>
       <div class="ni_list_l">
-          <ul>
-              <li>
-                  <a href="list_xq.html">
-                      <img src="../assets/images/zzrep.jpg" alt="" style="height:2.88rem;"> 
-                      <p>习酒</p> 
-                      <span>￥20000</span>
-                  </a>
-              </li>
-              <li>
-                  <a href="list_xq.html">
-                      <h2><img src="../assets/images/zzrep2.jpg" alt=""></h2>
-                      <p>谁知道贵州茅台庆典贵谁知道贵州茅台庆典贵</p> 
-                      <span>￥20000</span> 
-                  </a>
-              </li>
-              <li>
-                  <a href="list_xq.html">
-                      <img src="../assets/images/zzrep1.jpg" alt="" style="height:2.88rem;"> 
-                      <p>习酒</p> 
-                      <span>￥20000</span>
-                  </a>
-              </li>
-              <li>
-                  <a href="list_xq.html">
-                      <img src="../assets/images/zzrep.jpg" alt="" style="height:2.88rem;"> 
-                      <p>习酒</p> 
-                      <span>￥20000</span>
-                  </a>
-              </li>
-              <li>
-                  <a href="list_xq.html">
-                      <img src="../assets/images/zzrep1.jpg" alt="" style="height:2.88rem;"> 
-                      <p>习酒</p> 
-                      <span>￥20000</span>
-                  </a>
-              </li>
-              <li>
-                  <a href="list_xq.html">
-                      <img src="../assets/images/zzrep2.jpg" alt="" style="height:2.88rem;"> 
-                      <p>习酒</p> 
-                      <span>￥20000</span>
-                  </a>
+          <ul v-infinite-scroll="loadMore"
+            infinite-scroll-disabled="loading"
+            infinite-scroll-distance="10">
+              <li v-for="item in goods">
+                <a href="#">
+                  <img :src="item.thumbnail" alt="">
+                  <p>{{ item.productName }}</p>
+                  <span>￥{{ item.price }}</span>
+                </a>
               </li>
           </ul>
-      </div>
-      <div class="div_jiaz">
-        <img src="../assets/images/jiazz.gif" alt="">
       </div>
       <!--  -->
     </div>
@@ -95,12 +52,45 @@
 </template>
 
 <script>
+import footer from '@/components/footer'
 export default {
   data: function () {
       return {
         value : '',
         searchShow: false,
-        contentShow: true
+        contentShow: true,
+        loading: false,
+        nowSearch: '',
+        goods: [{
+          thumbnail: '/static/img/shala.38373bd.jpg',
+          productName: '香辣海鲜面',
+          price: 15.5
+        },
+        {
+          thumbnail: '/static/img/shala.38373bd.jpg',
+          productName: '原味海鲜面',
+          price: 15.5
+        },
+        {
+          thumbnail: '/static/img/shala.38373bd.jpg',
+          productName: '原味海鲜面',
+          price: 15.5
+        },
+        {
+          thumbnail: '/static/img/shala.38373bd.jpg',
+          productName: '原味海鲜面',
+          price: 15.5
+        },
+        {
+          thumbnail: '/static/img/shala.38373bd.jpg',
+          productName: '原味海鲜面',
+          price: 15.5
+        },
+        {
+          thumbnail: '/static/img/shala.38373bd.jpg',
+          productName: '原味海鲜面',
+          price: 15.5
+        }]
       }
   },
   methods : {
@@ -111,7 +101,39 @@ export default {
     cancelSearch() {
       this.searchShow = false
       this.contentShow = true
+    },
+    loadMore() {
+      this.loading = true;
+      setTimeout(() => {
+        var tgoods = [{
+          thumbnail: '/static/img/shala.38373bd.jpg',
+          productName: '原味海鲜面',
+          price: 15.5
+        },
+        {
+          thumbnail: '/static/img/shala.38373bd.jpg',
+          productName: '原味海鲜面',
+          price: 15.5
+        },
+        {
+          thumbnail: '/static/img/shala.38373bd.jpg',
+          productName: '原味海鲜面',
+          price: 15.5
+        },
+        {
+          thumbnail: '/static/img/shala.38373bd.jpg',
+          productName: '原味海鲜面',
+          price: 15.5
+        }]
+        for(var i = 0; i < tgoods.length; i ++) {
+          this.goods.push(tgoods[i])
+        }
+        this.loading = false;
+      }, 500);
     }
+  },
+  components: {
+    'foot-bar': footer
   }
 }
 </script>
