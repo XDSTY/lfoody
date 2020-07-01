@@ -25,7 +25,7 @@
       <!-- 头部 -->
       <div class="ziye_toub">
           <div class="left" onclick="history.back();"></div>
-          <p>商品列表</p>
+          <p>{{ city.cityName }}</p>
       </div>
       <div class="sos_list">
           <div v-on:click="searchClick"> 
@@ -48,11 +48,13 @@
       </div>
       <!--  -->
     </div>
+   <footer-bar></footer-bar>
   </div>
 </template>
 
 <script>
 import footer from '@/components/footer'
+import { product } from '../service/service'
 export default {
   data: function () {
       return {
@@ -61,36 +63,17 @@ export default {
         contentShow: true,
         loading: false,
         nowSearch: '',
-        goods: [{
-          thumbnail: '/static/img/shala.38373bd.jpg',
-          productName: '香辣海鲜面',
-          price: 15.5
+        city: {
+          cityId: '',
+          cityName: ''
         },
-        {
-          thumbnail: '/static/img/shala.38373bd.jpg',
-          productName: '原味海鲜面',
-          price: 15.5
+        query: {
+          cityId: 1,
+          productName: '',
+          page: 1,
+          pageSize: 10
         },
-        {
-          thumbnail: '/static/img/shala.38373bd.jpg',
-          productName: '原味海鲜面',
-          price: 15.5
-        },
-        {
-          thumbnail: '/static/img/shala.38373bd.jpg',
-          productName: '原味海鲜面',
-          price: 15.5
-        },
-        {
-          thumbnail: '/static/img/shala.38373bd.jpg',
-          productName: '原味海鲜面',
-          price: 15.5
-        },
-        {
-          thumbnail: '/static/img/shala.38373bd.jpg',
-          productName: '原味海鲜面',
-          price: 15.5
-        }]
+        goods: []
       }
   },
   methods : {
@@ -106,22 +89,22 @@ export default {
       this.loading = true;
       setTimeout(() => {
         var tgoods = [{
-          thumbnail: '/static/img/shala.38373bd.jpg',
+          thumbnail: 'http://119.23.240.184:8080/ss/shala.jpg',
           productName: '原味海鲜面',
           price: 15.5
         },
         {
-          thumbnail: '/static/img/shala.38373bd.jpg',
+          thumbnail: 'http://119.23.240.184:8080/ss/shala.jpg',
           productName: '原味海鲜面',
           price: 15.5
         },
         {
-          thumbnail: '/static/img/shala.38373bd.jpg',
+          thumbnail: 'http://119.23.240.184:8080/ss/shala.jpg',
           productName: '原味海鲜面',
           price: 15.5
         },
         {
-          thumbnail: '/static/img/shala.38373bd.jpg',
+          thumbnail: 'http://119.23.240.184:8080/ss/shala.jpg',
           productName: '原味海鲜面',
           price: 15.5
         }]
@@ -133,7 +116,15 @@ export default {
     }
   },
   components: {
-    'foot-bar': footer
+    'footer-bar': footer
+  },
+  mounted() {
+    product.getProductList(this.query)
+        .then((res) => {
+          if(res.code == 1) {
+           this.goods = res.data
+          }
+        })
   }
 }
 </script>

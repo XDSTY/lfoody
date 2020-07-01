@@ -41,7 +41,6 @@ export default {
     login() {
       user.login(this.user)
         .then((res) => {
-          console.log(res)
           if(res.code == 1 && res.data.accessToken) {
             setStore('accessToken', res.data.accessToken)
             setStore('refreshToken', res.data.refreshToken)

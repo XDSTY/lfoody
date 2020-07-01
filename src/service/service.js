@@ -213,3 +213,8 @@ export const user = {
   register: query => postRequest('/user/register', query),
   login: query => postRequest('/user/login', query)
 }
+
+export const product = {
+  getProductDetail: query => postRequest('/product/getProductDetail/v1', query),
+  getProductList: query => postRequest('/product/getProductList/v1', query)
+}
