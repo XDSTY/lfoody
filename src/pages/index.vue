@@ -54,7 +54,7 @@
 
 <script>
 import footer from '@/components/footer'
-import { product } from '../service/service'
+import { product, user } from '../service/service'
 export default {
   data: function () {
       return {
@@ -62,6 +62,7 @@ export default {
         searchShow: false,
         contentShow: true,
         loading: false,
+        hasMore: true,
         nowSearch: '',
         city: {
           cityId: '',
@@ -86,32 +87,24 @@ export default {
       this.contentShow = true
     },
     loadMore() {
+      if(this.loading || !this.hasMore) {
+        return
+      }
       this.loading = true;
       setTimeout(() => {
-        var tgoods = [{
-          thumbnail: 'http://119.23.240.184:8080/ss/shala.jpg',
-          productName: '原味海鲜面',
-          price: 15.5
-        },
-        {
-          thumbnail: 'http://119.23.240.184:8080/ss/shala.jpg',
-          productName: '原味海鲜面',
-          price: 15.5
-        },
-        {
-          thumbnail: 'http://119.23.240.184:8080/ss/shala.jpg',
-          productName: '原味海鲜面',
-          price: 15.5
-        },
-        {
-          thumbnail: 'http://119.23.240.184:8080/ss/shala.jpg',
-          productName: '原味海鲜面',
-          price: 15.5
-        }]
-        for(var i = 0; i < tgoods.length; i ++) {
-          this.goods.push(tgoods[i])
-        }
-        this.loading = false;
+        product.getProductList(this.query)
+          .then((res) => {
+            if(res.code == 1) {
+              var tgoods = res.data
+              for(var i = 0; i < tgoods.length; i ++) {
+                this.goods.push(tgoods[i])
+              }
+              if(res.data.length == 0) {
+                this.hasMore = false
+              }
+              this.loading = false;
+            }
+          })
       }, 500);
     }
   },
@@ -125,6 +118,12 @@ export default {
            this.goods = res.data
           }
         })
+    user.userCity()
+      .then((res) => {
+        if(res.code == 1) {
+          this.city = res.data
+        }
+      })
   }
 }
 </script>

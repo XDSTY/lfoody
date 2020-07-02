@@ -113,7 +113,6 @@ export default {
     mounted() {
       common.cityList('')
         .then((res) => {
-          console.log(res)
           if(res && res.code == 1) {
             this.cityDateSlots[0].values = this.cityDateSlots[0].values.concat(res.data)
           }

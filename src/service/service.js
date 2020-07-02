@@ -58,11 +58,23 @@ axios.interceptors.response.use(response => {
         router.push('/login')
         return
       }
-      // 重新发起请求
-      var config = response.config
-      config.headers.refreshToken = getStore('refreshToken')
-      console.log(config)
-      return axios(config)
+      // 刷新tokens
+      // var params = {accessToken: getStore('accessToken'), refreshToken: refreshToken}
+      // refreshToken
+      //   .then((res) => {
+      //     if(res.code == 1024) {
+      //       setStore('accessToken', res.data.accessToken)
+      //       setStore('refreshToken', res.data.refreshToken)
+      //     }
+      //   })
+      // refreshTokenFunc().then(async res => {
+      //   console.log(res)
+      // })
+      let ss = Token.refreshToken()
+      console.log(ss)
+      console.log(111)
+      response.config.headers.authorization = getStore('accessToken')
+      return axios(response.config)
     default:    
   }
   return data
@@ -98,20 +110,6 @@ export const getRequest = (url, params) => {
     headers: {
       'authorization': accessToken,
       'sourceCode': origin
-    }
-  })
-}
-
-export const getRequestWithRefreshToken = (url, params) => {
-  const accessToken = getStore('accessToken')
-  return axios({
-    method: 'get',
-    url: `${base}${url}`,
-    params: params,
-    headers: {
-      'authorization': accessToken,
-      'sourceCode': origin,
-      'refreshToken': getStore('refreshToken')
     }
   })
 }
@@ -211,10 +209,24 @@ export const common = {
 
 export const user = {
   register: query => postRequest('/user/register', query),
-  login: query => postRequest('/user/login', query)
+  login: query => postRequest('/user/login', query),
+  userCity: query => getRequest('/user/city', query),
+  refreshToken: query => postRequest('/user/refreshToken', query)
 }
 
 export const product = {
   getProductDetail: query => postRequest('/product/getProductDetail/v1', query),
   getProductList: query => postRequest('/product/getProductList/v1', query)
+}
+
+var refreshTokenFunc = async function() {
+  let res = await postRequest('/user/refreshToken', {accessToken: getStore('accessToken'), refreshToken: getStore('refreshToken')})
+  return res
+}
+
+class Token {
+  static async refreshToken () {
+    let data = await postRequest('/user/refreshToken', {accessToken: getStore('accessToken'), refreshToken: getStore('refreshToken')})
+    console.log(data)
+  }
 }
