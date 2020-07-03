@@ -12,6 +12,16 @@ var isRefreshToken = false
 
 let refreshSubscribers = []
 
+/*push所有请求到数组中*/
+function subscribeTokenRefresh (cb) {
+  refreshSubscribers.push(cb)
+}
+
+/*刷新请求（refreshSubscribers数组中的请求得到新的token之后会自执行，用新的token去请求数据）*/
+function onRrefreshed (token) {
+  refreshSubscribers.map(cb => cb(token))
+}
+
 const get = (path, query) => {
     return this.$axios(`${base}${path}`, query)
 }
@@ -34,6 +44,18 @@ const post = (path, body) => {
 axios.interceptors.request.use(config => {
   config.headers.authorization = getStore('accessToken')
   config.headers.sourceCode = origin
+  if(isRefreshToken == true && config.url != '/api/user/refreshToken') {
+    /*把请求(token)=>{....}都push到一个数组中*/
+    let retry = new Promise((resolve, reject) => {
+      /*(token) => {...}这个函数就是回调函数*/
+      subscribeTokenRefresh((token) => {
+        config.headers.authorization = token
+        /*将请求挂起*/
+        resolve(config)
+      })
+    })
+    return retry
+  }
   return config
 }, err => {
   Toast('请求超时')
@@ -57,7 +79,7 @@ axios.interceptors.response.use(async response => {
     case -1:
       Toast(data.message); break;
     case 1022:
-      console.log('重新发起请求')
+      console.log('刷新token')
       // accessToken过期  带上refreshToken重新请求获取新的token
       const refreshToken = getStore('refreshToken')
       if(!refreshToken || !response.config) {
@@ -65,6 +87,18 @@ axios.interceptors.response.use(async response => {
         return
       }
       // 刷新tokens
+      if(isRefreshToken == true) {
+        /*把请求(token)=>{....}都push到一个数组中*/
+        new Promise((resolve, reject) => {
+          /*(token) => {...}这个函数就是回调函数*/
+          subscribeTokenRefresh((token) => {
+            response.config.headers.authorization = token
+            /*将请求挂起*/
+            resolve(response.config)
+          })
+        })
+       break
+      }
       await refreshAllToken()
       console.log('执行完refreshToken')
       response.config.headers.authorization = getStore('accessToken')
@@ -228,11 +262,12 @@ export async function refreshAllToken() {
       setStore('refreshToken', res.data.refreshToken)
       isRefreshToken = false
       /*执行数组里的函数,重新发起被挂起的请求*/
-      console.log('放行请求')
+      onRrefreshed(res.data.accessToken)
       /*执行onRefreshed函数后清空数组中保存的请求*/
+      refreshSubscribers = []
     } else {
       isRefreshToken = false
-      Toast('登录失效，请重新登录refreshToken')
+      Toast('登录失效，请重新登录')
       router.push('/login')
     }
 }
