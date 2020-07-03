@@ -8,6 +8,10 @@ export const base = '/api'
 // 请求来源  100 wap
 export const origin = 100
 
+var isRefreshToken = false
+
+let refreshSubscribers = []
+
 const get = (path, query) => {
     return this.$axios(`${base}${path}`, query)
 }
@@ -28,14 +32,16 @@ const post = (path, body) => {
 }
 
 axios.interceptors.request.use(config => {
+  config.headers.authorization = getStore('accessToken')
+  config.headers.sourceCode = origin
   return config
 }, err => {
-  Toast('请求超时');
+  Toast('请求超时')
   return Promise.reject(err)
 })
 
 // http response 拦截器
-axios.interceptors.response.use(response => {
+axios.interceptors.response.use(async response => {
   if(response && response.headers) {
     var accessToken = response.headers.authorization
     var refreshToken = response.headers.refreshtoken
@@ -59,20 +65,8 @@ axios.interceptors.response.use(response => {
         return
       }
       // 刷新tokens
-      // var params = {accessToken: getStore('accessToken'), refreshToken: refreshToken}
-      // refreshToken
-      //   .then((res) => {
-      //     if(res.code == 1024) {
-      //       setStore('accessToken', res.data.accessToken)
-      //       setStore('refreshToken', res.data.refreshToken)
-      //     }
-      //   })
-      // refreshTokenFunc().then(async res => {
-      //   console.log(res)
-      // })
-      let ss = Token.refreshToken()
-      console.log(ss)
-      console.log(111)
+      await refreshAllToken()
+      console.log('执行完refreshToken')
       response.config.headers.authorization = getStore('accessToken')
       return axios(response.config)
     default:    
@@ -115,15 +109,12 @@ export const getRequest = (url, params) => {
 }
 
 export const postRequest = (url, params) => {
-  var accessToken = getStore('accessToken')
   return axios({
     method: 'post',
     url: `${base}${url}`,
     data: params,
     headers: {
-      'Content-Type': 'application/json',
-      'authorization': accessToken,
-      'sourceCode': origin
+      'Content-Type': 'application/json'
     }
   })
 }
@@ -219,14 +210,29 @@ export const product = {
   getProductList: query => postRequest('/product/getProductList/v1', query)
 }
 
-var refreshTokenFunc = async function() {
-  let res = await postRequest('/user/refreshToken', {accessToken: getStore('accessToken'), refreshToken: getStore('refreshToken')})
-  return res
-}
-
-class Token {
-  static async refreshToken () {
-    let data = await postRequest('/user/refreshToken', {accessToken: getStore('accessToken'), refreshToken: getStore('refreshToken')})
-    console.log(data)
-  }
+export async function refreshAllToken() {
+  isRefreshToken = true
+  var params = {accessToken: getStore('accessToken'), refreshToken: getStore('refreshToken')}
+  let res = await axios({
+      method: 'post',
+      url: `${base}/user/refreshToken`,
+      data: params,
+      headers: {
+        'Content-Type': 'application/json',
+        'sourceCode': origin
+      }
+    })
+    if(res.code == 1024) {
+      console.log(res)
+      setStore('accessToken', res.data.accessToken)
+      setStore('refreshToken', res.data.refreshToken)
+      isRefreshToken = false
+      /*执行数组里的函数,重新发起被挂起的请求*/
+      console.log('放行请求')
+      /*执行onRefreshed函数后清空数组中保存的请求*/
+    } else {
+      isRefreshToken = false
+      Toast('登录失效，请重新登录refreshToken')
+      router.push('/login')
+    }
 }
