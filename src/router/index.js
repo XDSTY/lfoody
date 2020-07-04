@@ -7,6 +7,7 @@ import index from '@/pages/index'
 import cart from '@/pages/cart'
 import me from '@/pages/me'
 import register from '@/pages/register'
+import detail from '@pages/detail'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -26,6 +27,14 @@ const router = new Router({
       path: '/index',
       name: 'index',
       component: index,
+      meta: {
+        needLogin: true
+      }
+    },
+    {
+      path: '/detail',
+      name: 'detail',
+      component: detail,
       meta: {
         needLogin: true
       }

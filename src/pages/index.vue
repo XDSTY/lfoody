@@ -40,7 +40,7 @@
               <li v-for="item in goods">
                 <a href="#">
                   <img :src="item.thumbnail" alt="">
-                  <p>{{ item.productName }}</p>
+                  <p>{{ item.productName }} 剩余{{ item.remainingNum }}份</p>
                   <span>￥{{ item.price }}</span>
                 </a>
               </li>
