@@ -7,7 +7,7 @@ import index from '@/pages/index'
 import cart from '@/pages/cart'
 import me from '@/pages/me'
 import register from '@/pages/register'
-import detail from '@pages/detail'
+import detail from '@/pages/detail'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {

@@ -227,23 +227,6 @@ export const uploadFileRequest = (url, params) => {
   })
 }
 
-export const common = {
-  cityList: query => postRequest('/city/list', query),
-  companyList: query => postRequest('/company/list', query)
-}
-
-export const user = {
-  register: query => postRequest('/user/register', query),
-  login: query => postRequest('/user/login', query),
-  userCity: query => getRequest('/user/city', query),
-  refreshToken: query => postRequest('/user/refreshToken', query)
-}
-
-export const product = {
-  getProductDetail: query => postRequest('/product/getProductDetail/v1', query),
-  getProductList: query => postRequest('/product/getProductList/v1', query)
-}
-
 export async function refreshAllToken() {
   isRefreshToken = true
   var params = {accessToken: getStore('accessToken'), refreshToken: getStore('refreshToken')}
@@ -270,4 +253,23 @@ export async function refreshAllToken() {
       Toast('登录失效，请重新登录')
       router.push('/login')
     }
+}
+
+
+
+export const common = {
+  cityList: query => postRequest('/city/list', query),
+  companyList: query => postRequest('/company/list', query)
+}
+
+export const user = {
+  register: query => postRequest('/user/register', query),
+  login: query => postRequest('/user/login', query),
+  userCity: query => getRequest('/user/city', query),
+  refreshToken: query => postRequest('/user/refreshToken', query)
+}
+
+export const product = {
+  getProductDetail: query => postRequest('/product/getProductDetail/v1', query),
+  getProductList: query => postRequest('/product/getProductList/v1', query)
 }
