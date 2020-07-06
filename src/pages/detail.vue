@@ -7,9 +7,7 @@
         <p>{{product.productName}}</p>
     </div>
     <mt-swipe class="banner_pos" :auto="4000">
-        <mt-swipe-item><img src="../assets/images/xiangqye.jpg"></mt-swipe-item>
-        <mt-swipe-item><img src="../assets/images/xiangqye1.jpg"></mt-swipe-item>
-        <mt-swipe-item><img src="../assets/images/xiangqye2.jpg"></mt-swipe-item>
+        <mt-swipe-item v-for="item in product.bannerList" :key="item"><img :src="item"></mt-swipe-item>
     </mt-swipe>
     <div class="lest_xq_cs">
         <div class="bt">
@@ -21,7 +19,7 @@
     </div>
     <!-- 图片详情 -->
     <div class="text_seq">
-        <img src="../assets/images/xiang.jpg" alt="">
+        <img v-for="item in product.images" :key="item" :src="item" alt="">
     </div>
     <div class="list_dier_xq_dib">
         <ul>
@@ -42,17 +40,16 @@
       <div class="tanc_dfk" v-show="buyFade">
           <div class="hei_e" @click="buyFade = false"></div>
           <div class="neirong">
-              <div class="tup"><img src="../assets/images/list_sy1.jpg" alt=""></div>
+              <div class="tup"><img :src="product.thumbnail" alt=""></div>
               <dl class="biaot_text">
                   <dt>{{ product.productName }}</dt>
-                  <dd>￥{{ product.price }}</dd>
+                  <dd>￥{{ finalPrice }}</dd>
               </dl>
               <div class="div_cs">
                   <div class="biaot_sdol" >
                       <div class="bt">备注</div>
                       <ul>
-                          <li class="no">加饭</li>
-                          <li class="no">卤蛋</li>
+                          <li v-for="(item, i) in items" :key="i" :value="item"  @click="pressAddItem(i ,item, $event)">{{ item.name }}</li>
                       </ul>
                   </div>
                   <a href="#" class="dibu_goum">{{ buttonText }}</a>
@@ -64,24 +61,17 @@
 </template>
 <script>
 import { product } from '../service/service'
+import { parseTime } from '../utils/index'
 export default {
   data: function () {
       return {
-        productId: '',  
-        product: {
-            productId: '',
-            productName: '',
-            bannerList: [],
-            images: [],
-            price: '',
-            remainingNum: '',
-            cutOffTime: '',
-            additionalItemRes: [],
-            thumbnail: ''
-        },
+        productId: 1,
+        product: '',
         buyFade: false,
         isCart: false,
-        buttonText: '立即购买'
+        buttonText: '立即购买',
+        items: [],
+        finalPrice: ''
       }
   },
     methods: {
@@ -92,14 +82,30 @@ export default {
       pressBuy() {
           this.buttonText = '立即购买'
           this.buyFade = true
+      },
+      pressAddItem(i, item, event) {
+          item.active = !item.active
+          if(item.active) {
+            this.finalPrice += parseFloat(this.items[i].price)
+            event.currentTarget.className = 'no'
+          } else {
+              this.finalPrice -= parseFloat(this.items[i].price)
+              event.currentTarget.className = ''
+          }
       }
     },
     mounted() {
         product.getProductDetail({productId: this.productId})
             .then(res => {
                 this.product = res.data
+                this.product.cutOffTime = parseTime(this.product.cutOffTime, '{y}-{m}-{d} {h}:{i}')
+                this.product.additionalItemRes.forEach(element => {
+                    element.active = false
+                    this.items.push(element)
+                });
+                this.finalPrice = parseFloat(this.product.price)
             })
-    } 
+    }
 }
 </script>
 
