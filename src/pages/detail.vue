@@ -23,14 +23,14 @@
     </div>
     <div class="list_dier_xq_dib">
         <ul>
-            <li><a href="#"><img src="../assets/images/dibu2.png" alt=""><p>购物车</p></a></li>
+            <li><a><img src="../assets/images/dibu2.png" alt=""><p>购物车</p></a></li>
         </ul>
         <div>
             <div class="Nmen_er">
-                <a href="#" @click="pressCart">加入购物车</a>
+                <a @click="pressCart">加入购物车</a>
             </div>
             <div class="PinmianZ shangp_goumai_tk">
-                <a href="#" @click="pressBuy">立即购买</a>
+                <a @click="pressBuy">立即购买</a>
             </div>
         </div>
     </div>
@@ -52,7 +52,7 @@
                           <li v-for="(item, i) in items" :key="i" :value="item"  @click="pressAddItem(i ,item, $event)">{{ item.name }}</li>
                       </ul>
                   </div>
-                  <a href="#" class="dibu_goum">{{ buttonText }}</a>
+                  <a class="dibu_goum">{{ buttonText }}</a>
               </div>
           </div>
       </div>
@@ -71,7 +71,7 @@ export default {
         isCart: false,
         buttonText: '立即购买',
         items: [],
-        finalPrice: ''
+        finalPrice: 0
       }
   },
     methods: {
@@ -86,10 +86,10 @@ export default {
       pressAddItem(i, item, event) {
           item.active = !item.active
           if(item.active) {
-            this.finalPrice += formatFloat(this.items[i].price)
+            this.finalPrice = formatFloat(parseFloat(this.finalPrice) + parseFloat(this.items[i].price))
             event.currentTarget.className = 'no'
           } else {
-              this.finalPrice -= formatFloat(this.items[i].price)
+              this.finalPrice = formatFloat(parseFloat(this.finalPrice) - parseFloat(this.items[i].price))
               event.currentTarget.className = ''
           }
       }

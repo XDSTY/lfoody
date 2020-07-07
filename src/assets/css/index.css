@@ -1087,7 +1087,7 @@ position: relative;
 }
 
 .nimen_text p{
-	font-size: .24rem;
+	font-size: .22rem;
 	min-height: .75rem;
 	color: #544e4c;
 }
@@ -1120,8 +1120,7 @@ position: relative;
 	height: .75rem;
 	text-align: center;
 	position: fixed;
-	bottom:0;
-	width: 100%;
+	bottom:6%;
 	left: 0;
 }
 .dibu_gouwc a{

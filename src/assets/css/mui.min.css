@@ -3846,7 +3846,6 @@ body > .mui-progressbar {
 
 .mui-numbox .mui-input-numbox, .mui-numbox .mui-numbox-input {
   display: inline-block;
-  overflow: hidden;
   width: 100% !important;
   height: 100%;
   margin: 0;
