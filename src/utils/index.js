@@ -29,3 +29,8 @@ export function parseTime(time, cFormat) {
     })
     return time_str
   }
+
+
+export function formatFloat(num) {
+  return parseFloat(num).toFixed(2)
+}

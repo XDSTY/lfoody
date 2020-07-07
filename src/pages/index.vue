@@ -13,10 +13,10 @@
       <div class="search_txt">
         <h2>热门搜索</h2>
         <ul>
-          <li><a href="list.html">旺铺</a></li>
-          <li><a href="list.html">花果园铺</a></li>
-          <li><a href="list.html">120㎡</a></li>
-          <li><a href="list.html">餐饮</a></li> 
+          <li>沙拉</li>
+          <li>沙拉</li>
+          <li>沙拉</li>
+          <li>沙拉</li> 
         </ul>
       </div>
     </div>
@@ -38,7 +38,7 @@
             infinite-scroll-disabled="loading"
             infinite-scroll-distance="10">
               <li v-for="item in goods" :key="item">
-                <a href="#">
+                <a href="#" @click="jumnpDetail(item.productId)">
                   <img :src="item.thumbnail" alt="">
                   <p>{{ item.productName }} 剩余{{ item.remainingNum }}份</p>
                   <span>￥{{ item.price }}</span>
@@ -106,6 +106,9 @@ export default {
             }
           })
       }, 500);
+    },
+    jumnpDetail(id) {
+      this.$router.push('/detail/' + id)
     }
   },
   components: {

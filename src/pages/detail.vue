@@ -61,11 +61,11 @@
 </template>
 <script>
 import { product } from '../service/service'
-import { parseTime } from '../utils/index'
+import { parseTime, formatFloat } from '../utils/index'
 export default {
   data: function () {
       return {
-        productId: 1,
+        productId: this.$route.params.id,
         product: '',
         buyFade: false,
         isCart: false,
@@ -86,10 +86,10 @@ export default {
       pressAddItem(i, item, event) {
           item.active = !item.active
           if(item.active) {
-            this.finalPrice += parseFloat(this.items[i].price)
+            this.finalPrice += formatFloat(this.items[i].price)
             event.currentTarget.className = 'no'
           } else {
-              this.finalPrice -= parseFloat(this.items[i].price)
+              this.finalPrice -= formatFloat(this.items[i].price)
               event.currentTarget.className = ''
           }
       }
@@ -103,7 +103,7 @@ export default {
                     element.active = false
                     this.items.push(element)
                 });
-                this.finalPrice = parseFloat(this.product.price)
+                this.finalPrice = formatFloat(this.product.price)
             })
     }
 }
