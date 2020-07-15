@@ -273,3 +273,7 @@ export const product = {
   getProductDetail: query => postRequest('/product/getProductDetail/v1', query),
   getProductList: query => postRequest('/product/getProductList/v1', query)
 }
+
+export const cart = {
+  getCartItemList: query => postRequest('/cart/list/v1', query)
+}

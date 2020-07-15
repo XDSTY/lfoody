@@ -43,24 +43,15 @@
 <script>
 import { parseTime, formatFloat } from '../utils/index'
 import footer from '@/components/footer'
+import { cart } from '../service/service'
 export default {
   data: function () {
       return {
-        items: [{
-          cartId: 1,
-          productName: '海鲜面（卤蛋、煎蛋、加饭）',
-          price: 15.5,
-          thumbnail: 'http://119.23.240.184:8080/ss/shala.jpg',
-          num: 1,
-          totalPrice: '15.50'
-        }, {
-          cartId: 2,
-          productName: '海鲜面（卤蛋）',
-          price: '14.50',
-          thumbnail: 'http://119.23.240.184:8080/ss/shala.jpg',
-          num: 1,
-          totalPrice: '14.50'
-        }]
+        query: {
+          page: 1,
+          pageSize: 10
+        },
+        items: []
       }
   },
   methods: {
@@ -77,11 +68,22 @@ export default {
               this.items.splice(i, 1)
           })
       }
+    },
+    getCartItemList() {
+      cart.getCartItemList(this.query)
+        .then(res => {
+          if(res.code == 1) {
+            this.items = res.data
+          }
+        })
     }
   },
   components: {
     'footer-bar': footer
   },
+  mounted() {
+    this.getCartItemList()
+  }
 }
 </script>
 
