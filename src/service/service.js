@@ -275,5 +275,9 @@ export const product = {
 }
 
 export const cart = {
-  getCartItemList: query => postRequest('/cart/list/v1', query)
+  getCartItemList: query => postRequest('/cart/list/v1', query),
+  incrCartItemNum: query => postRequest('/cart/incr/v1', query),
+  descCartItemNum: query => postRequest('/cart/desc/v1', query),
+  delCartItem: query => postRequest('/cart/del/v1', query),
+  addCartrItem: query => postRequest('/cart/add/v1', query)
 }

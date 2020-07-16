@@ -40,7 +40,7 @@
               <li v-for="(item, i) in goods" :key="i" :value="item">
                 <a @click="jumnpDetail(item.productId)">
                   <img :src="item.thumbnail" alt="">
-                  <p>{{ item.productName }} 剩余{{ item.remainingNum }}份</p>
+                  <p>{{ item.productName }}</p>
                   <span>￥{{ item.price }}</span>
                 </a>
               </li>

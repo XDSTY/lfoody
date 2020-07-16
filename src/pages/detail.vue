@@ -23,7 +23,7 @@
     </div>
     <div class="list_dier_xq_dib">
         <ul>
-            <li><a><img src="../assets/images/dibu2.png" alt=""><p>购物车</p></a></li>
+            <li><a @click="toCartPage"><img src="../assets/images/dibu2.png"><p>购物车</p></a></li>
         </ul>
         <div>
             <div class="Nmen_er">
@@ -52,7 +52,7 @@
                           <li v-for="(item, i) in items" :key="i" :value="item"  @click="pressAddItem(i ,item, $event)">{{ item.name }}</li>
                       </ul>
                   </div>
-                  <a class="dibu_goum">{{ buttonText }}</a>
+                  <a class="dibu_goum" @click="buyNow">{{ buttonText }}</a>
               </div>
           </div>
       </div>
@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-import { product } from '../service/service'
+import { product, cart } from '../service/service'
 import { parseTime, formatFloat } from '../utils/index'
 export default {
   data: function () {
@@ -71,17 +71,20 @@ export default {
         isCart: false,
         buttonText: '立即购买',
         items: [],
-        finalPrice: 0
+        finalPrice: 0,
+        buyType: 1
       }
   },
     methods: {
       pressCart() {
           this.buttonText = '加入购物车'
           this.buyFade = true
+          this.buyType = 1
       },
       pressBuy() {
           this.buttonText = '立即购买'
           this.buyFade = true
+          this.buyType = 2
       },
       pressAddItem(i, item, event) {
           item.active = !item.active
@@ -92,6 +95,30 @@ export default {
               this.finalPrice = formatFloat(parseFloat(this.finalPrice) - parseFloat(this.items[i].price))
               event.currentTarget.className = ''
           }
+      },
+      buyNow() {
+          // 加入购物车
+          if(this.buyType == 1) {
+              var param = {productId: this.productId, productNum: 1 }
+              var additionalItems = []
+              if(this.items != null && this.items.length > 0) {
+                this.items.forEach(element => {
+                    if(element.active == true) {
+                        additionalItems.push({additionalId: element.id, num: 1})
+                    }
+                })
+              }
+              param.cartItemAddParams = additionalItems
+              cart.addCartrItem(param)
+                .then(res => {
+                    this.$toast('添加成功')
+                })
+          } else {
+              //直接购买
+          }
+      },
+      toCartPage() {
+          this.$router.push('/cart')
       }
     },
     mounted() {
@@ -99,10 +126,12 @@ export default {
             .then(res => {
                 this.product = res.data
                 this.product.cutOffTime = parseTime(this.product.cutOffTime, '{y}-{m}-{d} {h}:{i}')
-                this.product.additionalItemRes.forEach(element => {
-                    element.active = false
-                    this.items.push(element)
-                });
+                if(this.product.additionalItemRes != null) {
+                    this.product.additionalItemRes.forEach(element => {
+                        element.active = false
+                        this.items.push(element)
+                    });
+                }
                 this.finalPrice = formatFloat(this.product.price)
             })
     }

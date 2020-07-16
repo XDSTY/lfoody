@@ -56,16 +56,33 @@ export default {
   },
   methods: {
     incrVal(item) {
-      item.num ++
-      item.totalPrice = formatFloat(parseFloat(item.price) * item.num)
+      var param = {cartId: item.cartId, productId: item.productId, num: 1}
+      cart.incrCartItemNum(param)
+        .then(res => {
+          if(res.code == 1) {
+            item.num ++
+            item.totalPrice = formatFloat(parseFloat(item.price) * item.num)
+          }
+        })
     },
     descVal(item, i) {
       if(item.num > 1) {
-        item.num --;
-        item.totalPrice = formatFloat(parseFloat(item.price) * item.num)
+        var param = {cartId: item.cartId, productId: item.productId, num: 1}
+        cart.descCartItemNum(param)
+          .then(res => {
+            if(res.code == 1) {
+              item.num --;
+              item.totalPrice = formatFloat(parseFloat(item.price) * item.num)
+            }
+          })
       } else {
           this.$messagebox.confirm('确定将该商品从购物车移除?').then(action => {
-              this.items.splice(i, 1)
+              var param = {cartId: item.cartId, productId: item.productId }
+              cart.delCartItem(param)
+                .then(res => {
+                  this.$toast('移除成功')
+                  this.items.splice(i, 1)
+                })
           })
       }
     },
