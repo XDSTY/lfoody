@@ -96,6 +96,7 @@ export default {
           .then((res) => {
             if(res.code == 1) {
               var tgoods = res.data
+              this.query.page = this.query.page + 1
               for(var i = 0; i < tgoods.length; i ++) {
                 this.goods.push(tgoods[i])
               }
@@ -115,12 +116,12 @@ export default {
     'footer-bar': footer
   },
   mounted() {
-    product.getProductList(this.query)
-        .then((res) => {
-          if(res.code == 1) {
-           this.goods = res.data
-          }
-        })
+    // product.getProductList(this.query)
+    //     .then((res) => {
+    //       if(res.code == 1) {
+    //        this.goods = res.data
+    //       }
+    //     })
     user.userCity()
       .then((res) => {
         if(res.code == 1) {

@@ -1,8 +1,6 @@
 <template>
   <div class="back-d">
-    <!-- 品牌 -->
     <div style="height: .75rem;"></div>
-    <!-- 头部 -->
     <div class="ziye_toub">
         <div class="left" onclick="history.back();"></div>
         <p>购物车</p>
@@ -21,7 +19,7 @@
                             <div class="houm_wez">
                                 <i>x{{ item.num }}</i>
                                 <div class="mui-numbox">
-                                    <button class=" mui-numbox-btn-minus" type="button" @click="descVal(item, i)">-</button>
+                                    <button class="mui-numbox-btn-minus" type="button" @click="descVal(item)">-</button>
                                     <input class="mui-numbox-input" type="number" :value="item.num" >
                                     <button class="mui-numbox-btn-plus" type="button" @click="incrVal(item)">+</button>
                                 </div>
@@ -65,7 +63,7 @@ export default {
           }
         })
     },
-    descVal(item, i) {
+    descVal(item) {
       if(item.num > 1) {
         var param = {cartId: item.cartId, productId: item.productId, num: 1}
         cart.descCartItemNum(param)

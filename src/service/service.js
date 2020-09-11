@@ -255,8 +255,6 @@ export async function refreshAllToken() {
     }
 }
 
-
-
 export const common = {
   cityList: query => postRequest('/city/list', query),
   companyList: query => postRequest('/company/list', query)

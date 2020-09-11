@@ -61,6 +61,7 @@
 </template>
 <script>
 import { product, cart } from '../service/service'
+import { setStore } from '../service/storage'
 import { parseTime, formatFloat } from '../utils/index'
 export default {
   data: function () {
@@ -114,7 +115,30 @@ export default {
                     this.$toast('添加成功')
                 })
           } else {
-              //直接购买
+              var additionalItems = []
+              var productParam = {productId: this.productId, thumbnail: this.product.thumbnail, price: this.finalPrice, productNum: 1}
+              var productName = this.product.productName
+              var hasAdditem = 0
+              if(this.items != null && this.items.length > 0) {
+                this.items.forEach(element => {
+                    if(element.active == true) {
+                        if(hasAdditem == 0) {
+                            hasAdditem = 1
+                            productName += '('
+                        }
+                        additionalItems.push(element)
+                        productName += element.name + '、'
+                    }
+                })
+              }
+              if(hasAdditem == 1) {
+                  productName = productName.substring(0, productName.length - 1)
+                  productName += ')'
+              }
+              productParam.productName = productName
+              productParam.items = additionalItems
+              setStore('lFoodProduct', productParam)
+              this.$router.push('/buy')
           }
       },
       toCartPage() {

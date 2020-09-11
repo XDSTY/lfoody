@@ -8,6 +8,7 @@ import cart from '@/pages/cart'
 import me from '@/pages/me'
 import register from '@/pages/register'
 import detail from '@/pages/detail'
+import buy from '@/pages/buy'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -59,6 +60,11 @@ const router = new Router({
       path: '/register',
       name: 'register',
       component: register
+    },
+    {
+      path: '/buy',
+      name: 'buy',
+      component: buy
     }
   ]
 })
