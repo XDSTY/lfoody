@@ -115,8 +115,9 @@ export default {
                     this.$toast('添加成功')
                 })
           } else {
+              // 进入确认订单页
               var additionalItems = []
-              var productParam = {productId: this.productId, thumbnail: this.product.thumbnail, price: this.finalPrice, productNum: 1}
+              var productParam = {productId: this.productId, thumbnail: this.product.thumbnail, productPrice: this.product.price, price: this.finalPrice, productNum: 1}
               var productName = this.product.productName
               var hasAdditem = 0
               if(this.items != null && this.items.length > 0) {
@@ -126,7 +127,7 @@ export default {
                             hasAdditem = 1
                             productName += '('
                         }
-                        additionalItems.push(element)
+                        additionalItems.push({id: element.id, name: element.name, num: 1, price: element.price})
                         productName += element.name + '、'
                     }
                 })
@@ -137,7 +138,10 @@ export default {
               }
               productParam.productName = productName
               productParam.items = additionalItems
-              setStore('lFoodProduct', productParam)
+
+              var params = []
+              params.push(productParam)
+              setStore('lFoodProduct', params)
               this.$router.push('/buy')
           }
       },

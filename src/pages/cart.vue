@@ -31,7 +31,7 @@
         </ul>
     </div>
     <div class="dibu_gouwc">
-        <a>立即结算</a>
+        <a @click="buyNow">立即结算</a>
     </div>
     <div style="height: .125rem;"></div>
     <footer-bar></footer-bar>
@@ -42,6 +42,7 @@
 import { parseTime, formatFloat } from '../utils/index'
 import footer from '@/components/footer'
 import { cart } from '../service/service'
+import { setStore } from '../service/storage'
 export default {
   data: function () {
       return {
@@ -91,6 +92,20 @@ export default {
             this.items = res.data
           }
         })
+    },
+    buyNow() {
+      // 组装数据传到确认订单页
+      if(this.items.length == 0) {
+        return
+      }
+      var params = []
+      this.items.forEach(e => {
+        var productParam = {productId: e.productId, thumbnail: e.thumbnail, productPrice: e.productPrice, price: e.price, productName: e.productName, productNum: e.num}
+        productParam.items = e.cartAdditionalItems
+        params.push(productParam)
+      })
+      setStore('lFoodProduct', params)
+      this.$router.push('/buy')
     }
   },
   components: {

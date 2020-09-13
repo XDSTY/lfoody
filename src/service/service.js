@@ -264,7 +264,8 @@ export const user = {
   register: query => postRequest('/user/register', query),
   login: query => postRequest('/user/login', query),
   userCity: query => getRequest('/user/city', query),
-  refreshToken: query => postRequest('/user/refreshToken', query)
+  refreshToken: query => postRequest('/user/refreshToken', query),
+  userCompany: query => getRequest('/user/companyInfo')
 }
 
 export const product = {
@@ -278,4 +279,8 @@ export const cart = {
   descCartItemNum: query => postRequest('/cart/desc/v1', query),
   delCartItem: query => postRequest('/cart/del/v1', query),
   addCartrItem: query => postRequest('/cart/add/v1', query)
+}
+
+export const order = {
+  placeOrder: query => postRequest('/order/placeOrder', query)
 }

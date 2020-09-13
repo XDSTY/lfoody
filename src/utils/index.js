@@ -34,3 +34,11 @@ export function parseTime(time, cFormat) {
 export function formatFloat(num) {
   return parseFloat(num).toFixed(2)
 }
+
+export function addPrice(p1, p2) {
+  return (parseFloat(p1) + parseFloat(p2)).toFixed(2)
+}
+
+export function multiPrice(p1, num) {
+  return parseFloat(p1 * num).toFixed(2)
+}

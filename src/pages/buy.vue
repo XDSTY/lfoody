@@ -6,16 +6,16 @@
     <div class="ziye_toub">
         <div class="left" onclick="history.back();"></div>
         <p>确认订单</p>
-    </div>     
+    </div>
     <div class="rem2"></div> 
     <div class="dili_guanli" style="text-align: left;">
         <ul>
             <li>
-                <p><i>默认</i>{{ userCompanyInfo.companyName }}</p>
-                <span>{{ userCompanyInfo.companyAddr }}</span>
-                <span>{{ userCompanyInfo.username }}</span>
+                <p><i>公司</i>{{ userCompanyInfo.companyName }}</p>
+                <p>地址： {{ userCompanyInfo.companyAddr }}</p>
+                <span>预订人：{{ userCompanyInfo.username }}</span>
                 <span>{{ userCompanyInfo.phone }}</span>
-            </li> 
+            </li>
         </ul>
     </div>
     <div class="rem2"></div> 
@@ -29,20 +29,6 @@
                   <dd style="text-align: left;">￥{{ item.price }}  <i class="jiayi_dfe">x{{ item.productNum }}</i></dd>
             </dl>
           </li>
-            <!-- <li>
-                <h3><a href="list_xq.html"><img style="height: 1.5rem;" src="http://119.23.240.184:9999/static/shala.jpg"></a></h3>
-                <dl>
-                    <dt>五粮液股份 万事如意佳品 浓香型白酒礼盒装 整箱装 52度</dt>
-                    <dd style="text-align: left;">￥498.00  <i class="jiayi_dfe">x1</i></dd>
-                </dl>
-            </li>
-            <li>
-                <h3><a href="list_xq.html"><img style="height: 1.5rem;" src="http://119.23.240.184:9999/static/shala.jpg"></a></h3>
-                <dl>
-                    <dt>五粮液52度普五第八代款整箱装500ml*6瓶 </dt>
-                    <dd style="text-align: left;">￥20090  <i class="jiayi_dfe">x1</i></dd>
-                </dl>
-            </li>  -->
         </ul>
     </div>
     <div class="rem2"></div> 
@@ -54,7 +40,7 @@
     <div style="height: .25rem;"></div>
     <div class="dibu_gouwc dibu_gouwc_vipxq" style="height: 8%;">
         <p style="width:65%;text-align: left;" >&nbsp;&nbsp;应付金额：<b style="color:#ff2e26 ;">￥{{ shouldPayPrice }}</b></p>
-        <a style="width:35%;" href="zhifu.html">提交支付</a>
+        <a style="width:35%;" @click="confirmOrder">确认订单</a>
     </div>
     <div style="height: .125rem;"></div>
     <footer-bar></footer-bar>
@@ -62,9 +48,9 @@
 </template>
 
 <script>
-import { parseTime, formatFloat } from '../utils/index'
+import { formatFloat, addPrice, multiPrice } from '../utils/index'
 import { getStore, removeStore } from '../service/storage'
-import {user} from '../service/service'
+import { user, order } from '../service/service'
 import footer from '@/components/footer'
 export default {
   data: function () {
@@ -78,19 +64,52 @@ export default {
   methods: {
     jumpToProductDetail(id) {
       this.$router.push('/detail/' + id)
+    },
+    confirmOrder() {
+      var param = {totalPrice: this.totalPrice}
+      var orderProductAdds = []
+      this.products.forEach(e => {
+        var product = {}
+        product.productId = e.productId
+        product.productNum = e.productNum
+        product.productPrice = e.productPrice
+        if(e.items != null && e.items.length > 0) {
+          var productItems = []
+          e.items.forEach(item => {
+            productItems.push({id: item.id, num: item.num, price: item.price})
+          })
+          product.items = productItems
+        }
+        orderProductAdds.push(product)
+      })
+      param.orderProductAdds = orderProductAdds
+      order.placeOrder(param)
+        .then(res => {
+          if(res.code == 1) {
+            console.log('下单成功')
+          }
+        })
     }
   },
   components: {
     'footer-bar': footer
   },
   mounted() {
+    user.userCompany()
+      .then(res => {
+        if(res.code == 1) {
+          this.userCompanyInfo = res.data
+        }
+      })
 
-    var productParam = getStore('lFoodProduct')
-    if(productParam != null && productParam != '') {
-      var productObj = JSON.parse(productParam)
-      this.products.push(productObj)
-      this.totalPrice = productObj.price
-      this.shouldPayPrice = productObj.price
+    var productParams = getStore('lFoodProduct')
+    if(productParams != null && productParams != '') {
+      this.products = JSON.parse(productParams)
+      this.totalPrice = 0
+      this.products.forEach(e => {
+        this.totalPrice = addPrice(this.totalPrice, multiPrice(e.price, e.productNum))
+      })
+      this.shouldPayPrice = this.totalPrice
     }
   }
 }
