@@ -282,5 +282,6 @@ export const cart = {
 }
 
 export const order = {
-  placeOrder: query => postRequest('/order/placeOrder', query)
+  placeOrder: query => postRequest('/order/placeOrder', query),
+  payOrderPage: query => postRequest('/order/payOrderPage', query)
 }

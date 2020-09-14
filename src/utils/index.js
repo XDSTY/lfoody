@@ -30,7 +30,6 @@ export function parseTime(time, cFormat) {
     return time_str
   }
 
-
 export function formatFloat(num) {
   return parseFloat(num).toFixed(2)
 }
@@ -41,4 +40,8 @@ export function addPrice(p1, p2) {
 
 export function multiPrice(p1, num) {
   return parseFloat(p1 * num).toFixed(2)
+}
+
+export function getTimeMills(time) {
+  return new Date(time).getTime()
 }

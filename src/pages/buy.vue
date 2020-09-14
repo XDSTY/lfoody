@@ -86,7 +86,8 @@ export default {
       order.placeOrder(param)
         .then(res => {
           if(res.code == 1) {
-            console.log('下单成功')
+            // 下单成功跳转到支付页
+            this.$router.push('/pay/' + res.data.orderId)
           }
         })
     }

@@ -9,6 +9,7 @@ import me from '@/pages/me'
 import register from '@/pages/register'
 import detail from '@/pages/detail'
 import buy from '@/pages/buy'
+import pay from '@/pages/pay'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -65,6 +66,11 @@ const router = new Router({
       path: '/buy',
       name: 'buy',
       component: buy
+    },
+    {
+      path: '/pay/:orderId',
+      name: 'pay',
+      component: pay
     }
   ]
 })
