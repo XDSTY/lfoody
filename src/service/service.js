@@ -265,7 +265,8 @@ export const user = {
   login: query => postRequest('/user/login', query),
   userCity: query => getRequest('/user/city', query),
   refreshToken: query => postRequest('/user/refreshToken', query),
-  userCompany: query => getRequest('/user/companyInfo')
+  userCompany: query => getRequest('/user/companyInfo'),
+  getUserInfo: query => getRequest('/user/info')
 }
 
 export const product = {

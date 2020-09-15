@@ -5,11 +5,11 @@
         <img class="beij_s" src="../assets/images/my_bj.jpg" alt="">
 		<div class="nimetou_gaib">
 			<div class="toux_hou">
-				<img id="Dfgrg" style="height:1.1rem;" src="../assets/images/touxiang2.jpg" alt="">
+				<img id="Dfgrg" style="height:1.1rem;" :src="userInfo.profilePic">
 				<input id="tupian_Sc" type="file">
 			</div>
 			<div class="mingz">
-				<h2>还搁这<!--<i>专</i><i>精</i>--></h2> 
+				<h2>{{ userInfo.username }}</h2> 
 			</div>
 		</div>
     </div>
@@ -20,8 +20,8 @@
         <div class="neir_Ef"> 
 			<div class="yverjif">
 				<ul>
-					<li><h2><i>￥</i>12093.00</h2><p>余额</p></li>
-					<li><h2>989487</h2><p>积分</p></li>
+					<li><h2><i>￥</i>{{ userInfo.amount }}</h2><p>余额</p></li>
+					<li><h2>{{ userInfo.integral }}</h2><p>积分</p></li>
 				</ul>
 			</div>
             <div class="my_tik_list fenh_ziyek yuanj_sd">
@@ -37,11 +37,11 @@
                     </a>
                   </li>
                   <li>
-                    <a href="my_pingou.html">
+                    <a>
                       <h2>
                         <img src="../assets/images/dier_my_img2.png">
                         <i>2</i>
-                      </h2>  
+                      </h2>
                       <p>待配送</p>
                     </a>
                   </li>
@@ -49,7 +49,7 @@
                     <a href="my_pingou.html">
                       <h2>
                         <img src="../assets/images/dier_my_img1.png">
-                        <i>2</i>
+                        <i>10</i>
                       </h2>
                       <p>已完成</p>
                     </a>
@@ -125,24 +125,34 @@
 
 <script>
 import footer from '@/components/footer'
+import { user, order } from '../service/service'
 export default {
   data: function () {
       return {
-        value : ''
+		value : '',
+		userInfo: ''
       }
   },
   components: {
     'footer-bar': footer
+  },
+  mounted() {
+	  user.getUserInfo()
+	  	.then(res => {
+			if(res.code == 1) {
+				this.userInfo = res.data
+			}
+		})
   }
 }
 </script>
 
 <style scoped>
 .fenh_ziyek ul li h2{
-								width: .65rem;
-								position: relative;
-								margin: auto;
-							}
+	width: .65rem;
+	position: relative;
+	margin: auto;
+}
 .fenh_ziyek ul li h2 i{
   background: #ff0000;
 	border-radius: 50%;
