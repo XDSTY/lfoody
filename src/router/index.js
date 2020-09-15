@@ -52,10 +52,7 @@ const router = new Router({
     {
       path: '/me',
       name: 'me',
-      component: me,
-      meta: {
-        needLogin: true
-      }
+      component: me
     },
     {
       path: '/register',

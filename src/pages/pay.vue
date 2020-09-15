@@ -19,7 +19,7 @@
             <li><img src="../assets/images/zhif1.png"><span>微信支付</span></li>
         </ul>
         <div class="dibu_gouwc">
-            <a href="#">确认支付</a>
+            <a @click="pay">{{ buttonName }}</a>
         </div>
     <footer-bar></footer-bar>
   </div>
@@ -39,13 +39,36 @@ export default {
         endTime: 0,
         endText: '',
         shouldPayAmount: '',
-        orderId: ''
+        orderId: '',
+        buttonName: '确认支付',
+        buttonType: 1
       }
   },
   methods: {
     countDownE_cb() {
         // 跳转到个人中心页
         this.endText = '订单已取消'
+        this.buttonType = 2
+        this.buttonName = '返回首页'
+    },
+    pay() {
+      if(this.buttonType == 1) {
+        var param = {orderId: this.orderId, totalPrice: this.shouldPayAmount, payChannel: 1, payType: 1}
+        order.payOrder(param)
+          .then(res => {
+            if(res.code == 1) {
+              var data = res.data
+              if(data.success == false) {
+                this.$toast('data.msg')
+                this.$router.push('/index')
+              } else {
+                this.$router.push('/me')
+              }
+            }
+          })
+      } else if(this.buttonType == 2) {
+        this.$router.push('/index')
+      }
     }
   },
   components: {
