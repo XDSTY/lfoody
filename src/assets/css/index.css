@@ -1798,6 +1798,13 @@ padding: 2%;
     color: #ff2e26;
     border: #ff2e26 1px solid;
 }
+
+.order-amount-class {
+  display: inline-block;
+  color: #ff2e26;
+  padding: 0 .3rem;
+}
+
 .order_btn .yiwanc{
     color: #ddd;
     width: .68rem;

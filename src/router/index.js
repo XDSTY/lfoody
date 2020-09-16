@@ -10,10 +10,10 @@ import register from '@/pages/register'
 import detail from '@/pages/detail'
 import buy from '@/pages/buy'
 import pay from '@/pages/pay'
-import sw from '@/pages/sw'
+import orderList from '@/pages/orderList'
 
 const originalPush = Router.prototype.push
-Router.prototype.push = function push(location) {
+Router.prototype.push = function push (location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
@@ -71,9 +71,9 @@ const router = new Router({
       component: pay
     },
     {
-      path: '/sw',
-      name: 'sw',
-      component: sw
+      path: '/orderList/:status',
+      name: 'orderList',
+      component: orderList
     }
   ]
 })
