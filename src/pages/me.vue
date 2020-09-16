@@ -27,42 +27,15 @@
             <div class="my_tik_list fenh_ziyek yuanj_sd">
                 <h3 style="text-align: left;">我的订单<a>全部订单></a></h3>
                 <ul>
-                  <li>
-                    <a> 
+                  <li v-for="(item, i) in modules" :key="i" :value="item">
+                    <a @click="jumpToListPage(item)"> 
                       <h2>
-                        <img src="../assets/images/dier_my_img.png">
-                        <i>2</i>
+                        <img :src="item.icon">
+                        <i v-if="item.showNum == true && item.num > 0">{{ item.num }}</i>
                       </h2>
-                      <p>待付款</p>
+                      <p>{{ item.moduleName }}</p>
                     </a>
                   </li>
-                  <li>
-                    <a>
-                      <h2>
-                        <img src="../assets/images/dier_my_img2.png">
-                        <i>2</i>
-                      </h2>
-                      <p>待配送</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="my_pingou.html">
-                      <h2>
-                        <img src="../assets/images/dier_my_img1.png">
-                        <i>10</i>
-                      </h2>
-                      <p>已完成</p>
-                    </a>
-                  </li> 
-                  <li>
-                    <a href="my_pingou.html">
-                      <h2>
-                        <img src="../assets/images/dier_my_img3.png">
-                        <i>2</i>
-                      </h2>
-                      <p>退款</p>
-                    </a>
-                  </li>  
                 </ul>
             </div>
 			
@@ -72,7 +45,6 @@
 				<a href="my_yve.html">
 					<h3><img src="../assets/images/hou_tjimg.png">设 置</h3>
 					<div class="right"> 
-						<!-- <span><b>450.00</b>元</span> -->
 						<img src="../assets/images/right_jiant.png">
 					</div> 
 				</a>
@@ -83,7 +55,6 @@
 				<a href="#">
 					<h3><img src="../assets/images/hou_tjimg1.png">帮助与客服</h3>
 					<div class="right"> 
-						<!-- <span><b>300</b>分</span> -->
 						<img src="../assets/images/right_jiant.png">
 					</div> 
 				</a>
@@ -114,9 +85,7 @@
 	</div>
 	<!--  -->
 	<div style="height: .9rem;"></div>
-
-		</div>
-		
+	</div>
 	</div> 
 </div>
     <footer-bar></footer-bar>
@@ -130,8 +99,14 @@ export default {
   data: function () {
       return {
 		value : '',
-		userInfo: ''
+		userInfo: '',
+		modules: []
       }
+  },
+  methods : {
+	  jumpToListPage(item) {
+
+	  }
   },
   components: {
     'footer-bar': footer
@@ -141,6 +116,12 @@ export default {
 	  	.then(res => {
 			if(res.code == 1) {
 				this.userInfo = res.data
+			}
+		})
+	order.getOrderModules()
+		.then(res => {
+			if(res.code == 1) {
+				this.modules = res.data
 			}
 		})
   }

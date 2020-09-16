@@ -7,9 +7,14 @@ import router from './router'
 import Meta from 'vue-meta'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+
+// require styles
+import 'swiper/dist/css/swiper.css'
 
 Vue.use(MintUI)
 Vue.use(Meta)
+Vue.use(VueAwesomeSwiper)
 // Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 
