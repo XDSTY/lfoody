@@ -23,28 +23,28 @@ function onRrefreshed (token) {
 }
 
 const get = (path, query) => {
-    return this.$axios(`${base}${path}`, query)
+  return this.$axios(`${base}${path}`, query)
 }
 
 const post = (path, body) => {
-    const reqBody = {}
-  
-    if (body instanceof Array) {
-      // 如果是数组的话，统一从服务端用名为list的字符串来接收
-      reqBody.list = JSON.stringify(body)
-    } else {
-      for (const key in body) {
-        reqBody[key] = typeof body[key] === 'string' ? body[key].trim() : body[key]
-      }
+  const reqBody = {}
+
+  if (body instanceof Array) {
+    // 如果是数组的话，统一从服务端用名为list的字符串来接收
+    reqBody.list = JSON.stringify(body)
+  } else {
+    for (const key in body) {
+      reqBody[key] = typeof body[key] === 'string' ? body[key].trim() : body[key]
     }
-  
-    return this.$axios(`${base}${path}`, reqBody, 'post')
+  }
+
+  return this.$axios(`${base}${path}`, reqBody, 'post')
 }
 
 axios.interceptors.request.use(config => {
   config.headers.authorization = getStore('accessToken')
   config.headers.sourceCode = origin
-  if(isRefreshToken == true && config.url != '/api/user/refreshToken') {
+  if (isRefreshToken == true && config.url != '/api/user/refreshToken') {
     /*把请求(token)=>{....}都push到一个数组中*/
     let retry = new Promise((resolve, reject) => {
       /*(token) => {...}这个函数就是回调函数*/
@@ -64,10 +64,10 @@ axios.interceptors.request.use(config => {
 
 // http response 拦截器
 axios.interceptors.response.use(async response => {
-  if(response && response.headers) {
+  if (response && response.headers) {
     var accessToken = response.headers.authorization
     var refreshToken = response.headers.refreshtoken
-    if(accessToken && refreshToken) {
+    if (accessToken && refreshToken) {
       setStore('accessToken', accessToken)
       setStore('refreshToken', refreshToken)
     }
@@ -82,12 +82,12 @@ axios.interceptors.response.use(async response => {
       console.log('刷新token')
       // accessToken过期  带上refreshToken重新请求获取新的token
       const refreshToken = getStore('refreshToken')
-      if(!refreshToken || !response.config) {
+      if (!refreshToken || !response.config) {
         router.push('/login')
         return
       }
       // 刷新tokens
-      if(isRefreshToken == true) {
+      if (isRefreshToken == true) {
         /*把请求(token)=>{....}都push到一个数组中*/
         new Promise((resolve, reject) => {
           /*(token) => {...}这个函数就是回调函数*/
@@ -97,19 +97,19 @@ axios.interceptors.response.use(async response => {
             resolve(response.config)
           })
         })
-       break
+        break
       }
       await refreshAllToken()
       console.log('执行完refreshToken')
       response.config.headers.authorization = getStore('accessToken')
       return axios(response.config)
-    default:    
+    default:
   }
   return data
 }, (error) => {
-  if(error && error.response) {
+  if (error && error.response) {
     switch (error.response.status) {
-      case 400: error.message = '请求错误' ; break;
+      case 400: error.message = '请求错误'; break;
       case 401: error.message = '未授权，请重新登录'; Toast(error.message); router.push('/login'); break;
       case 403: error.message = '拒绝访问'; break;
       case 404: error.message = '请求出错'; break;
@@ -223,36 +223,36 @@ export const uploadFileRequest = (url, params) => {
     headers: {
       'authorization': accessToken,
       'sourceCode': origin
-    }    
+    }
   })
 }
 
-export async function refreshAllToken() {
+export async function refreshAllToken () {
   isRefreshToken = true
-  var params = {accessToken: getStore('accessToken'), refreshToken: getStore('refreshToken')}
+  var params = { accessToken: getStore('accessToken'), refreshToken: getStore('refreshToken') }
   let res = await axios({
-      method: 'post',
-      url: `${base}/user/refreshToken`,
-      data: params,
-      headers: {
-        'Content-Type': 'application/json',
-        'sourceCode': origin
-      }
-    })
-    if(res.code == 1024) {
-      console.log(res)
-      setStore('accessToken', res.data.accessToken)
-      setStore('refreshToken', res.data.refreshToken)
-      isRefreshToken = false
-      /*执行数组里的函数,重新发起被挂起的请求*/
-      onRrefreshed(res.data.accessToken)
-      /*执行onRefreshed函数后清空数组中保存的请求*/
-      refreshSubscribers = []
-    } else {
-      isRefreshToken = false
-      Toast('登录失效，请重新登录')
-      router.push('/login')
+    method: 'post',
+    url: `${base}/user/refreshToken`,
+    data: params,
+    headers: {
+      'Content-Type': 'application/json',
+      'sourceCode': origin
     }
+  })
+  if (res.code == 1024) {
+    console.log(res)
+    setStore('accessToken', res.data.accessToken)
+    setStore('refreshToken', res.data.refreshToken)
+    isRefreshToken = false
+    /*执行数组里的函数,重新发起被挂起的请求*/
+    onRrefreshed(res.data.accessToken)
+    /*执行onRefreshed函数后清空数组中保存的请求*/
+    refreshSubscribers = []
+  } else {
+    isRefreshToken = false
+    Toast('登录失效，请重新登录')
+    router.push('/login')
+  }
 }
 
 export const common = {
@@ -286,5 +286,6 @@ export const order = {
   placeOrder: query => postRequest('/order/placeOrder', query),
   payOrderPage: query => postRequest('/order/payOrderPage', query),
   payOrder: query => postRequest('/order/payOrder', query),
-  getOrderModules: query => getRequest('/order/modules', query)
+  getOrderModules: query => getRequest('/order/modules', query),
+  getOrderList: query => postRequest('/order/list', query)
 }

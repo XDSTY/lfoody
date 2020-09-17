@@ -17,18 +17,23 @@
         <mt-tab-container-item id="1">
           <div class="list_shouye">
             <ul>
-              <li>
-                <div style="overflow:hidden;margin-top:0.5cm;">
-                  <h3><a href="#"><img style="height: 1.5rem;"
-                           src="../assets/images/list_sy.jpg"></a></h3>
+              <li v-for="(order, i) in orders"
+                  :key="i"
+                  :value="order">
+                <div v-for="(product, j) in order.products"
+                     :key="j"
+                     :value="product"
+                     style="overflow:hidden;margin-top:0.5cm;">
+                  <h3><a><img style="height: 1.5rem;"
+                           :src="product.thumbnail"></a></h3>
                   <dl>
-                    <dt>奥利给</dt>
-                    <dd style="text-align: left;">￥20090 <span style="float: right;">x1</span></dd>
+                    <dt>{{ product.productName }}</dt>
+                    <dd style="text-align: left;">￥{{ product.totalPrice }} <span style="float: right;">x{{ product.productNum }}</span></dd>
                   </dl>
                 </div>
                 <div class="order_btn">
-                  <p class="order-amount-class">总计：￥20090</p>
-                  <a href="my_pingou_xq.html">去支付</a>
+                  <p class="order-amount-class">总计：￥{{ order.totalPrice }}</p>
+                  <a @click="goPay(order.orderId)">去支付</a>
                 </div>
               </li>
             </ul>
@@ -100,6 +105,7 @@
 
 <script>
 import footer from '@/components/footer'
+import { order } from '../service/service'
 export default {
   name: 'page-navbar',
   data () {
@@ -107,10 +113,16 @@ export default {
       status: '',
       selected: '1',
       items: [{ name: "待付款", id: '1', status: 2 }, { name: "待配送", id: '2', status: 4 },
-      { name: "完成", id: '3', status: 7 }, { name: "退款", id: '4', status: 8 }]
+      { name: "完成", id: '3', status: 7 }, { name: "退款", id: '4', status: 8 }],
+      orders: [],
+      page: 1,
+      pageSize: 10
     };
   },
   methods: {
+    goPay (orderId) {
+      console.log(orderId)
+    }
   },
   components: {
     'footer-bar': footer
@@ -124,7 +136,13 @@ export default {
   },
   mounted () {
     this.status = this.$route.params.status
-    console.log(this.status)
+    var params = { status: this.status, page: this.page, pageSize: this.pageSize }
+    order.getOrderList(params)
+      .then(res => {
+        if (res.code == 1) {
+          this.orders = res.data
+        }
+      })
   }
 };
 </script>
